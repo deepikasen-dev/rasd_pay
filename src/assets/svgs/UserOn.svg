@@ -1,0 +1,19 @@
+<svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="user_icon">
+<rect id="Rectangle" opacity="0.01" x="0.5" width="20" height="20" fill="white"/>
+<g id="Icon">
+<path id="Path" d="M3.5 18C3.5 9 18.5 9 18.5 18" stroke="url(#paint0_linear_30_3439)" stroke-width="1.5" stroke-linecap="round"/>
+<circle id="Oval" cx="11.0339" cy="6.375" r="3.375" stroke="url(#paint1_linear_30_3439)" stroke-width="1.5"/>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_30_3439" x1="3.5" y1="11.5517" x2="8.38685" y2="22.0258" gradientUnits="userSpaceOnUse">
+<stop stop-color="#19CBCB"/>
+<stop offset="1" stop-color="#048EC3"/>
+</linearGradient>
+<linearGradient id="paint1_linear_30_3439" x1="7.65894" y1="3.30168" x2="14.0318" y2="9.44832" gradientUnits="userSpaceOnUse">
+<stop stop-color="#19CBCB"/>
+<stop offset="1" stop-color="#048EC3"/>
+</linearGradient>
+</defs>
+</svg>
