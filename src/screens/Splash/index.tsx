@@ -19,7 +19,7 @@ const SplashScreen = ( { navigation }: Props ) => {
 
     useEffect( () => {
         setTimeout( () => {
-            // navigation.replace( 'OnboardingScreen' );  // Navigate to next screen after 2 seconds
+            navigation.replace( Routes.ONBOARDING );  // Navigate to next screen after 2 seconds
         }, 2000 );
     }, [ navigation ] );
     const { setColor } = useStatusBarColor();
@@ -28,32 +28,32 @@ const SplashScreen = ( { navigation }: Props ) => {
             setColor( colors.primary1 );
 
             return () => {
-                setColor( colors.primary1 );  // Reset when unmounted
+                setColor( colors.lightBG );  // Reset when unmounted
             };
         }, [] )
     );
 
     return (
 
-    
 
 
-           <LinearGradient
-                colors={ [ colors.primary1, colors.secondory ] }
+
+        <LinearGradient
+            colors={ [ colors.primary1, colors.secondory ] }
             style={ styles.container }
             start={ { x: 0, y: 0 } } // top-left
             end={ { x: 1, y: 1 } }   // bottom-right
         >
-           
-            
-            <SvgImages.AppLogoSVG style={ styles.logo } /> 
+
+
+            <SvgImages.AppLogoSVG style={ styles.logo } />
             <Text style={ styles.title }>{ otherStrings.appName }</Text>
-            {/* <ActivityIndicator size="small" color="#ffffff" style={ { marginTop: 20 } } /> */}
+            {/* <ActivityIndicator size="small" color="#ffffff" style={ { marginTop: 20 } } /> */ }
 
             <Text style={ styles.version }>{ otherStrings.appVersion }</Text>
-</LinearGradient>
-  
-        
+        </LinearGradient>
+
+
     );
 };
 
@@ -64,7 +64,7 @@ const styles = StyleSheet.create( {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-backgroundColor:colors.primary1,
+        backgroundColor: colors.primary1,
     },
     logo: {
         width: 150,

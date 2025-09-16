@@ -3,6 +3,7 @@ import Routes from '../utils/Routes';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import SplashScreen from '../screens/Splash';
+import OnboardingScreen from '../screens/Onboarding';
 
 
 export type RootStackParamList = {
@@ -19,6 +20,7 @@ const AppNavigator = () => (
     <NavigationContainer>
         <Stack.Navigator screenOptions={ { headerShown: false } }>
             { StackScreen( Routes.SPALSH, SplashScreen ) }
+            { StackScreen( Routes.ONBOARDING, OnboardingScreen ) }
         </Stack.Navigator>
     </NavigationContainer>
 );
