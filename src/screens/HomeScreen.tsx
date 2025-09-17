@@ -17,6 +17,7 @@ import { hp } from "../utils/globalUse";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import SvgImages from "../utils/svgImages";
+import NotificationBell from "../components/NotificationBell";
 
 
 const HomeScreen: React.FC = () => {
@@ -63,23 +64,8 @@ const HomeScreen: React.FC = () => {
                         </View>
                     </View>
 
-                    <TouchableOpacity style={ styles.notificationWrapper }>
-                        <Image
-                            source={ {
-                                uri: "https://cdn-icons-png.flaticon.com/512/3602/3602145.png",
-                            } }
-                            style={ styles.notificationIcon }
-                        />
-                        { user?.notification_count !== undefined && (
-                            <View style={ styles.badge }>
-                                <Text style={ styles.badgeText }>
-                                    { user.notification_count > 9
-                                        ? "9+"
-                                        : user.notification_count }
-                                </Text>
-                            </View>
-                        ) }
-                    </TouchableOpacity>
+                    <NotificationBell count={ user?.notification_count } />
+
                 </View>
 
                 {/* Wallet Card */ }

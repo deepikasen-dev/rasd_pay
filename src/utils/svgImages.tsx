@@ -20,6 +20,11 @@ import CircleArrowDownSVG from '../assets/svgs/CircleArrowDown.svg';
 import CircleArrowUpSVG from '../assets/svgs/CircleArrowUp.svg';
 import BalanceSVG from '../assets/svgs/Balance.svg';
 import NotificationSVG from '../assets/svgs/Notification.svg';
+import ExpenseApprovedSVG from '../assets/svgs/ExpenseApproved.svg';
+import ExpenseRejectedSVG from '../assets/svgs/ExpenseRejected.svg';
+import PriceAlertSVG from '../assets/svgs/PriceAlert.svg';
+import BudgetWarningSVG from '../assets/svgs/BudgetWarning.svg';
+import DustBinSVG from '../assets/svgs/Dustbin.svg';
 
 
 export default {
@@ -45,5 +50,9 @@ export default {
     CircleArrowDownSVG,
     CircleArrowUpSVG,
     BalanceSVG,
-
+    ExpenseApprovedSVG,
+    ExpenseRejectedSVG,
+    PriceAlertSVG,
+    BudgetWarningSVG,
+    DustBinSVG
 };
