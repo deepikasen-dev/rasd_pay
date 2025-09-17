@@ -28,7 +28,7 @@ const HomeScreen: React.FC = () => {
     const user = useSelector( ( state: RootState ) => state.auth.user );
     const funds = useSelector( ( state: RootState ) => state.auth.funds );
     // console.log( user );
-    console.log( funds );
+    // console.log( funds );
 
     useFocusEffect(
         React.useCallback( () => {
@@ -98,23 +98,14 @@ const HomeScreen: React.FC = () => {
                 !modalVisible && <View style={ styles.bottomSection }>
                     <View style={ styles.row }>
                         <View style={ styles.actionCard }>
-                            <Image
-                                source={ {
-                                    uri: "https://cdn-icons-png.flaticon.com/512/929/929430.png",
-                                } }
-                                style={ styles.actionIcon }
-                            />
+                            
+                            <SvgImages.FundReceivedSVG style={ styles.actionIcon } />
                             <Text style={ styles.actionLabel }>FUND RECEIVED</Text>
                             <Text style={ styles.amount }>${ funds?.funds_received || "0.00" }</Text>
                         </View>
 
                         <View style={ [ styles.actionCard, { backgroundColor: "#E0F2FE" } ] }>
-                            <Image
-                                source={ {
-                                    uri: "https://cdn-icons-png.flaticon.com/512/929/929440.png",
-                                } }
-                                style={ styles.actionIcon }
-                            />
+                            <SvgImages.FundSpentSVG style={ styles.actionIcon } />
                             <Text style={ styles.actionLabel }>FUND SPENT</Text>
                             <Text style={ [ styles.amount, { color: "#0284C7" } ] }>
                                 ${ funds?.funds_spent || "0.00" }
@@ -229,7 +220,7 @@ const styles = StyleSheet.create( {
 
     walletCard: {
         marginHorizontal: 16,
-        backgroundColor: colors.walletColor,
+        backgroundColor: colors.primaryText,
         borderRadius: 20,
         padding: 20,
         flexDirection: "row",

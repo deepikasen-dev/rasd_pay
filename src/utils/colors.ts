@@ -9,7 +9,9 @@ const colors = {
     approvedText: '#247948',
     pendingBG: '#FFEDD8',
     pendingText: '#D97706',
-    walletColor:'#002D62',
+    primaryText: '#002D62',
+    borderColor:'#E0E0E0',
+    
     
 }
 export default colors;

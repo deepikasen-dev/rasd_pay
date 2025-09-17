@@ -9,15 +9,11 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { fetchExpenses } from "../redux/slices/expenseSlice";
 import { RootState, AppDispatch } from "../redux/store";
+import { Expense } from "../types/expense";
+import colors from "../utils/colors";
+import SvgImages from "../utils/svgImages";
+import { wp } from "../utils/globalUse";
 
-interface Receipt {
-    id: number;
-    vendor_name: string;
-    total_amount: string;
-    status: "pending" | "approved" | "rejected";
-    invoice_date: string;
-    invoice_url: string;
-}
 
 const TABS: Array<"All" | "pending" | "approved" | "rejected"> = [
     "All",
@@ -37,12 +33,12 @@ const ExpensesScreen: React.FC<any> = ( { navigation } ) => {
     }, [ dispatch ] );
 
     const filteredReceipts =
-        activeTab === "All" ? list : list.filter( ( r: Receipt ) => r.status === activeTab );
+        activeTab === "All" ? list : list.filter( ( r: Expense ) => r.status === activeTab );
 
-    const renderCard = ( { item }: { item: Receipt } ) => (
+    const renderCard = ( { item }: { item: Expense } ) => (
         <TouchableOpacity
             style={ styles.card }
-            onPress={ () => navigation.navigate( "ReceiptDetails", { receipt: item } ) }
+            onPress={ () => navigation.navigate( "ReceiptDetails", { id: item.id } ) }
         >
             {/* Vendor Name + Status */ }
             <View style={ styles.headerRow }>
@@ -55,7 +51,11 @@ const ExpensesScreen: React.FC<any> = ( { navigation } ) => {
                             ? styles.pending
                             : styles.rejected
                 ] }>
-                    <Text style={ styles.statusText }>{ item.status }</Text>
+                    <Text style={ [ styles.statusText, item.status === "approved"
+                        ? styles.approvedText
+                        : item.status === "pending"
+                            ? styles.pendingText
+                            : styles.rejectedText ] }>{ item.status }</Text>
                 </View>
             </View>
 
@@ -65,7 +65,10 @@ const ExpensesScreen: React.FC<any> = ( { navigation } ) => {
             {/* Footer: View Receipt + Date */ }
             <View style={ styles.footerRow }>
                 <TouchableOpacity onPress={ () => navigation.navigate( "ReceiptDetails", { receipt: item } ) }>
-                    <Text style={ styles.viewReceipt }>👁️ View Receipt</Text>
+                    <View style={{flexDirection:'row', gap:wp(2)}}>
+                    <SvgImages.EyeOnSVG/>
+                    <Text style={ styles.viewReceipt }>View Receipt</Text>
+                   </View>
                 </TouchableOpacity>
                 <Text style={ styles.date }>{ item.invoice_date }</Text>
             </View>
@@ -73,7 +76,7 @@ const ExpensesScreen: React.FC<any> = ( { navigation } ) => {
     );
 
     return (
-        <View style={ { flex: 1, padding: 16 } }>
+        <View style={ { flex: 1, padding: 16, backgroundColor:colors.bg } }>
             {/* Tabs */ }
             <View style={ styles.tabRow }>
                 { TABS.map( ( tab ) => (
@@ -96,7 +99,8 @@ const ExpensesScreen: React.FC<any> = ( { navigation } ) => {
                 <FlatList
                     data={ filteredReceipts }
                     keyExtractor={ ( item ) => item.id.toString() }
-                    renderItem={ renderCard }
+                        renderItem={ renderCard }
+                        showsVerticalScrollIndicator={false}
                 />
             ) }
         </View>
@@ -104,27 +108,29 @@ const ExpensesScreen: React.FC<any> = ( { navigation } ) => {
 };
 
 const styles = StyleSheet.create( {
-    tabRow: { flexDirection: "row", marginBottom: 16 },
+       
+    tabRow: { flexDirection: "row", marginBottom: 16, backgroundColor: "#F1F5F9", padding: 10,borderRadius:10 },
     tab: {
         flex: 1,
-        padding: 10,
+        paddingVertical:10,
+        paddingHorizontal: 2,
         borderBottomWidth: 2,
         borderColor: "transparent",
         alignItems: "center",
     },
-    activeTab: { borderColor: "#048EC3" },
-    tabText: { color: "#9CA3AF" },
-    activeText: { color: "#048EC3", fontWeight: "600" },
+    activeTab: { backgroundColor: "#fff", borderRadius:6 },
+    tabText: { color: "#9CA3AF", textTransform: "capitalize" },
+    activeText: { color: colors.primaryText, fontWeight: "600" },
 
     card: {
         padding: 16,
         backgroundColor: "#fff",
         borderRadius: 12,
-        marginBottom: 12,
-        shadowColor: "#000",
-        shadowOpacity: 0.05,
-        shadowRadius: 4,
-        elevation: 2,
+        marginBottom: 20,
+        borderColor: '#E0E0E0',
+        borderWidth:1,
+        
+        
     },
     headerRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
     title: { fontWeight: "600", fontSize: 16 },
@@ -133,10 +139,13 @@ const styles = StyleSheet.create( {
         paddingHorizontal: 10,
         borderRadius: 20,
     },
-    approved: { backgroundColor: "#D1FAE5" },
-    pending: { backgroundColor: "#FEF3C7" },
-    rejected: { backgroundColor: "#FECACA" },
-    statusText: { fontSize: 12, fontWeight: "500", textTransform: "capitalize" },
+    approved: { backgroundColor: colors.approvedBG },
+    pending: { backgroundColor: colors.pendingBG},
+    rejected: { backgroundColor: colors.rejectedBG },
+    approvedText: { color: colors.approvedText },
+    pendingText: { color: colors.pendingText },
+    rejectedText: { color: colors.errorText},
+    statusText: { fontSize: 12, fontWeight: "400", textTransform: "capitalize" },
 
     amount: { fontSize: 18, fontWeight: "700", marginTop: 8 },
     footerRow: {

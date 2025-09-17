@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// ProfileScreen.tsx
+import React, { useEffect, useState } from "react";
 import {
     View,
     Text,
@@ -8,75 +9,102 @@ import {
     StyleSheet,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../redux/store";
+import { updateUserSetting } from "../redux/slices/userSlice";
+import { logout } from "../redux/slices/authSlice";
+import CustomButton from "../components/CustomButton";
+import SvgImages from "../utils/svgImages";
 
-interface ProfileScreenProps {
-    name?: string;
-    profileImage?: string;
-    onLogout?: () => void;
-}
+const ProfileScreen: React.FC = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    const { user } = useSelector( ( state: RootState ) => state.auth );
 
-const ProfileScreen: React.FC<ProfileScreenProps> = ( {
-    name,
-    profileImage,
-    onLogout,
-} ) => {
-    const [ language, setLanguage ] = useState( "English" );
-    const [ biometricEnabled, setBiometricEnabled ] = useState( false );
-    const [ notificationsEnabled, setNotificationsEnabled ] = useState( true );
+    const [ language, setLanguage ] = useState( user?.language_id?.toString() || "1" );
+    const [ biometricEnabled, setBiometricEnabled ] = useState( !!user?.biometric_login );
+    const [ notificationsEnabled, setNotificationsEnabled ] = useState(
+        user?.is_notify === 1
+    );
+
+    useEffect( () => {
+        if ( user ) {
+            setLanguage( user.language_id?.toString() || "1" );
+            setBiometricEnabled( !!user.biometric_login );
+            setNotificationsEnabled( user.is_notify === 1 );
+        }
+    }, [ user ] );
+
+    const handleUpdate = ( field: string, value: any ) => {
+        dispatch( updateUserSetting( { [ field ]: value } ) );
+    };
 
     return (
         <View style={ styles.container }>
             <Text style={ styles.header }>Profile & Settings</Text>
 
+            {/* Profile */ }
             <View style={ styles.profileBox }>
                 <TouchableOpacity>
                     <Image
                         source={ {
-                            uri:
-                                profileImage ||
-                                "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+                            uri: user?.profile_image
+                                ? `https://your-api-base-url/${ user.profile_image }`
+                                : "https://cdn-icons-png.flaticon.com/512/149/149071.png",
                         } }
                         style={ styles.avatar }
                     />
                 </TouchableOpacity>
-                <Text style={ styles.name }>{ name }</Text>
+                <Text style={ styles.name }>{ user?.name }</Text>
             </View>
 
+            {/* Preferences */ }
             <Text style={ styles.sectionTitle }>PREFERENCES</Text>
 
             <View style={ styles.card }>
                 <Text style={ styles.label }>Language</Text>
                 <Picker
                     selectedValue={ language }
-                    onValueChange={ ( val ) => setLanguage( val ) }
+                    onValueChange={ ( val ) => {
+                        setLanguage( val );
+                        handleUpdate( "language_id", val );
+                    } }
                 >
-                    <Picker.Item label="English" value="English" />
-                    <Picker.Item label="Spanish" value="Spanish" />
-                    <Picker.Item label="French" value="French" />
+                    <Picker.Item label="English" value="1" />
+                    <Picker.Item label="Spanish" value="2" />
+                    <Picker.Item label="French" value="3" />
                 </Picker>
             </View>
 
             <View style={ styles.toggleCard }>
                 <Text style={ styles.label }>Biometric Login</Text>
-                <Switch value={ biometricEnabled } onValueChange={ setBiometricEnabled } />
+                <Switch
+                    value={ biometricEnabled }
+                    onValueChange={ ( val ) => {
+                        setBiometricEnabled( val );
+                        handleUpdate( "biometric_login", val ? 1 : 0 );
+                    } }
+                />
             </View>
 
             <View style={ styles.toggleCard }>
                 <Text style={ styles.label }>App Notifications</Text>
                 <Switch
                     value={ notificationsEnabled }
-                    onValueChange={ setNotificationsEnabled }
+                    onValueChange={ ( val ) => {
+                        setNotificationsEnabled( val );
+                        handleUpdate( "is_notify", val ? 1 : 0 );
+                    } }
                 />
             </View>
 
+            {/* Security */ }
             <Text style={ styles.sectionTitle }>ACCOUNT SECURITY</Text>
             <TouchableOpacity style={ styles.card }>
                 <Text style={ styles.label }>Change Password</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={ onLogout } style={ styles.button }>
-                <Text style={ styles.buttonText }>Logout</Text>
-            </TouchableOpacity>
+
+            <CustomButton title="Logout" onPress={ () => dispatch( logout() ) } icon={<SvgImages.LogOutSVG/>} />
 
             <Text style={ styles.version }>App Version 1.0.0</Text>
         </View>

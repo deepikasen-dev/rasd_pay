@@ -25,6 +25,8 @@ import ExpenseRejectedSVG from '../assets/svgs/ExpenseRejected.svg';
 import PriceAlertSVG from '../assets/svgs/PriceAlert.svg';
 import BudgetWarningSVG from '../assets/svgs/BudgetWarning.svg';
 import DustBinSVG from '../assets/svgs/Dustbin.svg';
+import LogOutSVG from '../assets/svgs/LogOut.svg';
+import EyeOnSVG from '../assets/svgs/EyeOn.svg';
 
 
 export default {
@@ -54,5 +56,7 @@ export default {
     ExpenseRejectedSVG,
     PriceAlertSVG,
     BudgetWarningSVG,
-    DustBinSVG
+    DustBinSVG,
+    LogOutSVG,
+    EyeOnSVG,
 };
