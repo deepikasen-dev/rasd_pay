@@ -11,7 +11,13 @@ const otherStrings = {
 
     getStarted: "Get started",
     next: "Next",
-    skip: "Skip"
+    skip: "Skip",
+    continue: "Continue",
+    
+    chooseLanguage: "Choose your language",
+    selectLanguage: "Select your preferred language to continue",
+    languageUS: "US   English",
+    languageSA: "SA   العربية"
 };
 
 export default otherStrings;

@@ -14,6 +14,7 @@ import colors from "../../utils/colors";
 import otherStrings from "../../utils/otherStrings";
 import { hp } from "../../utils/globalUse";
 import CustomButton from "../../components/CustomButton";
+import Routes from "../../utils/Routes";
 
 const { width, height } = Dimensions.get( "window" );
 
@@ -56,12 +57,12 @@ const OnboardingScreen = ( { navigation }: any ) => {
         if ( currentIndex < slides.length - 1 ) {
             flatListRef.current?.scrollToIndex( { index: currentIndex + 1 } );
         } else {
-            navigation.replace( "Home" ); // Go to home after last slide
+            navigation.replace(Routes.GET_STARTED ); // Go to home after last slide
         }
     };
 
     const handleSkip = () => {
-        navigation.replace( "Home" );
+        navigation.replace( Routes.GET_STARTED );
     };
 
     const renderItem = ( { item }: any ) => (

@@ -1,61 +1,74 @@
-// import React from "react";
-// import { View, Text, StyleSheet, Image } from "react-native";
-// import GradientButton from "../components/GradientButton";
-// import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import CustomButton from "../components/CustomButton";
+import otherStrings from "../utils/otherStrings";
+import Routes from "../utils/Routes";
+import SvgImages from "../utils/svgImages";
+import colors from "../utils/colors";
+import { useStatusBarColor } from "../context";
+import { useFocusEffect } from "@react-navigation/native";
 
-// type Props = NativeStackScreenProps<any>;
+type Props = NativeStackScreenProps<any>;
 
-// const GetStartedScreen: React.FC<Props> = ( { navigation } ) => {
-//     return (
-//         <View style={ styles.container }>
-//             <Image
-//                 source={ require( "../assets/logo.png" ) } // replace with your logo
-//                 style={ styles.logo }
-//             />
-//             <Text style={ styles.title }>Welcome to RASD Pay</Text>
-//             <Text style={ styles.subtitle }>
-//                 Smart expense management for modern businesses
-//             </Text>
+const GetStartedScreen: React.FC<Props> = ( { navigation } ) => {
+    const { setColor } = useStatusBarColor();
+    useFocusEffect(
+        React.useCallback( () => {
+            setColor( colors.bg );
 
-//             <View style={ styles.buttonWrapper }>
-//                 <GradientButton
-//                     title="Get started"
-//                     onPress={ () => navigation.navigate( "LanguageSelection" ) }
-//                 />
-//             </View>
-//         </View>
-//     );
-// };
+            return () => {
+                setColor( colors.lightBG );  // Reset when unmounted
+            };
+        }, [] )
+    );
+    return (
+        <View style={ styles.container }>
+            <SvgImages.AppLogoSVG style={ styles.logo } />
+            <Text style={ styles.title }>{otherStrings.welcomeMessage}</Text>
+            <Text style={ styles.subtitle }>
+                {otherStrings.description1}
+            </Text>
 
-// const styles = StyleSheet.create( {
-//     container: {
-//         flex: 1,
-//         backgroundColor: "#F7FDFF",
-//         alignItems: "center",
-//         justifyContent: "center",
-//         padding: 20,
-//     },
-//     logo: {
-//         width: 80,
-//         height: 80,
-//         marginBottom: 24,
-//         resizeMode: "contain",
-//     },
-//     title: {
-//         fontSize: 20,
-//         fontWeight: "700",
-//         color: "#1C2C3A",
-//         marginBottom: 8,
-//     },
-//     subtitle: {
-//         fontSize: 14,
-//         textAlign: "center",
-//         color: "#6B7A8C",
-//         marginBottom: 40,
-//     },
-//     buttonWrapper: {
-//         width: "100%",
-//     },
-// } );
+            <View style={ styles.buttonWrapper }>
+                <CustomButton
+                    title={otherStrings.getStarted}
+                    onPress={ () => navigation.navigate( Routes.LANGUAGE_SELECTION ) }
+                />
+            </View>
+        </View>
+    );
+};
 
-// export default GetStartedScreen;
+const styles = StyleSheet.create( {
+    container: {
+        flex: 1,
+        backgroundColor: colors.bg,
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 20,
+    },
+    logo: {
+        width: 80,
+        height: 80,
+        marginBottom: 24,
+        resizeMode: "contain",
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: "700",
+        color: "#1C2C3A",
+        marginBottom: 8,
+    },
+    subtitle: {
+        fontSize: 14,
+        textAlign: "center",
+        color: "#6B7A8C",
+        marginBottom: 40,
+    },
+    buttonWrapper: {
+        width: "100%",
+    },
+} );
+
+export default GetStartedScreen;
