@@ -4,6 +4,8 @@ import {
 } from 'react-native-safe-area-context';
 import AppNavigator from './src/navigation/AppNavigator';
 import { StatusBarColorProvider, useStatusBarColor } from './src/context';
+import { Provider } from "react-redux";
+import { store } from './src/redux/store';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -12,8 +14,10 @@ function App() {
     <SafeAreaProvider>
       <StatusBar barStyle={ isDarkMode ? 'light-content' : 'dark-content' } />
       <StatusBarColorProvider>
-        <AppContent />
-        </StatusBarColorProvider>
+        <Provider store={ store }>
+          <AppContent />
+        </Provider>
+      </StatusBarColorProvider>
     </SafeAreaProvider>
   );
 }
@@ -23,15 +27,15 @@ function AppContent() {
   return (
     <View style={ styles.container }>
       <StatusBar backgroundColor={ color } translucent={ false } />
-      <AppNavigator/>
+      <AppNavigator />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create( {
   container: {
     flex: 1,
   },
-});
+} );
 
 export default App;

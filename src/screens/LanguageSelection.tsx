@@ -5,18 +5,32 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import otherStrings from "../utils/otherStrings";
 import Routes from "../utils/Routes";
 import SvgImages from "../utils/svgImages";
+import { useDispatch } from "react-redux";
+import { setLanguage } from "../redux/slices/languageSlice";
 
 type Props = NativeStackScreenProps<any>;
 
 const LanguageSelectionScreen: React.FC<Props> = ( { navigation } ) => {
     const [ selected, setSelected ] = useState<string>( "en" );
+    const dispatch = useDispatch();
+
+    // Mapping language → ID
+    const languageMap: Record<string, string> = {
+        en: "1",
+        ar: "2",
+    };
+
+    const handleContinue = () => {
+        const languageId = languageMap[ selected ];
+        dispatch( setLanguage( languageId ) ); // ✅ store in Redux
+        navigation.navigate( Routes.SIGN_IN );
+    };
 
     return (
         <View style={ styles.container }>
-
             <SvgImages.AppLogoSVG style={ styles.logo } />
-            <Text style={ styles.title }>{otherStrings.chooseLanguage}</Text>
-            <Text style={ styles.subtitle }>{otherStrings.selectLanguage}</Text>
+            <Text style={ styles.title }>{ otherStrings.chooseLanguage }</Text>
+            <Text style={ styles.subtitle }>{ otherStrings.selectLanguage }</Text>
 
             <TouchableOpacity
                 style={ [
@@ -25,8 +39,7 @@ const LanguageSelectionScreen: React.FC<Props> = ( { navigation } ) => {
                 ] }
                 onPress={ () => setSelected( "en" ) }
             >
-                
-                <Text style={ styles.languageText }>{otherStrings.languageUS}</Text>
+                <Text style={ styles.languageText }>{ otherStrings.languageUS }</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -36,18 +49,16 @@ const LanguageSelectionScreen: React.FC<Props> = ( { navigation } ) => {
                 ] }
                 onPress={ () => setSelected( "ar" ) }
             >
-                <Text style={ styles.languageText }>{otherStrings.languageSA}</Text>
+                <Text style={ styles.languageText }>{ otherStrings.languageSA }</Text>
             </TouchableOpacity>
 
             <View style={ styles.buttonWrapper }>
-                <CustomButton
-                    title={otherStrings.continue}
-                    onPress={ () => navigation.navigate( Routes.SIGN_IN ) }
-                />
+                <CustomButton title={ otherStrings.continue } onPress={ handleContinue } />
             </View>
         </View>
     );
 };
+
 
 const styles = StyleSheet.create( {
     container: {

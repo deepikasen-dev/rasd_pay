@@ -16,6 +16,9 @@ import UserSVG from '../assets/svgs/User.svg';
 import UserOnSVG from '../assets/svgs/UserOn.svg';
 import FundReceivedSVG from '../assets/svgs/FundReceived.svg';
 import FundSpentSVG from '../assets/svgs/FundSpent.svg';
+import CircleArrowDownSVG from '../assets/svgs/CircleArrowDown.svg';
+import CircleArrowUpSVG from '../assets/svgs/CircleArrowUp.svg';
+import BalanceSVG from '../assets/svgs/Balance.svg';
 import NotificationSVG from '../assets/svgs/Notification.svg';
 
 
@@ -39,5 +42,8 @@ export default {
     NotificationSVG,
     FundReceivedSVG,
     FundSpentSVG,
+    CircleArrowDownSVG,
+    CircleArrowUpSVG,
+    BalanceSVG,
 
 };

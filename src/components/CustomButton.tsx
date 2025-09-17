@@ -7,24 +7,31 @@ import { hp, wp } from "../utils/globalUse";
 interface CustomButtonProps {
     title: string;
     onPress: () => void;
-    icon?: React.ReactNode; // now accepts SVG or any React element
+    icon?: React.ReactNode;
+    disabled?: boolean; // New prop
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ( {
     title,
     onPress,
     icon,
+    disabled = false,
 } ) => {
     return (
         <TouchableOpacity
-            style={ styles.buttonWrapper }
-            onPress={ onPress }
+            style={ [ styles.buttonWrapper, disabled && styles.disabledButton ] }
+            onPress={ disabled ? undefined : onPress }
             activeOpacity={ 0.8 }
+            disabled={ disabled }
         >
             <LinearGradient
-                colors={ [ colors.primary1, colors.secondory,colors.secondory ] }
+                colors={
+                    disabled
+                        ? [ colors.primary1 + "80", colors.secondory + "80", colors.secondory + "80" ] // Slightly transparent colors when disabled
+                        : [ colors.primary1, colors.secondory, colors.secondory ]
+                }
                 start={ { x: 0, y: 0 } }
-                end={ { x: 1, y: 1 } } // diagonal gradient
+                end={ { x: 1, y: 1 } }
                 style={ styles.gradient }
             >
                 <View style={ styles.content }>
@@ -42,9 +49,12 @@ const styles = StyleSheet.create( {
         borderRadius: 8,
         overflow: "hidden",
     },
+    disabledButton: {
+        opacity: 0.6, // Reduce opacity when disabled
+    },
     gradient: {
-        paddingVertical: hp(1.7),
-        paddingHorizontal: wp(2),
+        paddingVertical: hp( 1.7 ),
+        paddingHorizontal: wp( 2 ),
         borderRadius: 8,
         alignItems: "center",
     },
@@ -55,7 +65,7 @@ const styles = StyleSheet.create( {
     },
     text: {
         color: "#fff",
-        fontSize: wp(4),
+        fontSize: wp( 4 ),
         fontWeight: "600",
     },
     icon: {

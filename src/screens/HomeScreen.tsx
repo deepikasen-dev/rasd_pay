@@ -14,17 +14,26 @@ import colors from "../utils/colors";
 import { useStatusBarColor } from "../context";
 import { useFocusEffect } from "@react-navigation/native";
 import { hp } from "../utils/globalUse";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import SvgImages from "../utils/svgImages";
+
 
 const HomeScreen: React.FC = () => {
     const [ modalVisible, setModalVisible ] = useState( false );
-
     const { setColor } = useStatusBarColor();
+
+    // ✅ Get user & funds from Redux
+    const user = useSelector( ( state: RootState ) => state.auth.user );
+    const funds = useSelector( ( state: RootState ) => state.auth.funds );
+    // console.log( user );
+    console.log( funds );
+
     useFocusEffect(
         React.useCallback( () => {
             setColor( colors.primary1 );
-
             return () => {
-                setColor( colors.lightBG );  // Reset when unmounted
+                setColor( colors.lightBG );
             };
         }, [] )
     );
@@ -41,13 +50,16 @@ const HomeScreen: React.FC = () => {
                     <View style={ styles.userInfo }>
                         <Image
                             source={ {
-                                uri: "https://randomuser.me/api/portraits/men/32.jpg",
+                                uri: user?.profile_image
+                                    ? `https://your-api.com/${ user.profile_image }`
+                                    : "https://cdn-icons-png.flaticon.com/512/149/149071.png", // fallback avatar
                             } }
                             style={ styles.avatar }
                         />
+                        {/* <Image source={ { uri: "invoices/user_11/profile_68ca628951577_2025-09-17.jpg" } } style={ styles.avatar } /> */ }
                         <View>
                             <Text style={ styles.welcome }>Welcome Back</Text>
-                            <Text style={ styles.username }>Mahmoud A.</Text>
+                            <Text style={ styles.username }>{ user?.name || "Guest" }</Text>
                         </View>
                     </View>
 
@@ -58,23 +70,31 @@ const HomeScreen: React.FC = () => {
                             } }
                             style={ styles.notificationIcon }
                         />
-                        <View style={ styles.badge }>
-                            <Text style={ styles.badgeText }>9+</Text>
-                        </View>
+                        { user?.notification_count !== undefined && (
+                            <View style={ styles.badge }>
+                                <Text style={ styles.badgeText }>
+                                    { user.notification_count > 9
+                                        ? "9+"
+                                        : user.notification_count }
+                                </Text>
+                            </View>
+                        ) }
                     </TouchableOpacity>
                 </View>
 
                 {/* Wallet Card */ }
-                <TouchableOpacity
+                { !modalVisible && <TouchableOpacity
                     style={ styles.walletCard }
                     activeOpacity={ 0.8 }
                     onPress={ () => setModalVisible( true ) }
                 >
                     <View>
                         <Text style={ styles.walletLabel }>My Wallet</Text>
-                        <Text style={ styles.balance }>$0.00</Text>
+                        <Text style={ styles.balance }>
+                            ${ funds?.remaining_balance || "0.00" }
+                        </Text>
                         <Text style={ styles.subText }>Total balance</Text>
-                        <Text style={ styles.cardName }>Mahmoud Abdulazeem</Text>
+                        <Text style={ styles.cardName }>{ user?.name }</Text>
                     </View>
                     <Image
                         source={ {
@@ -83,36 +103,41 @@ const HomeScreen: React.FC = () => {
                         style={ styles.qrIcon }
                     />
                 </TouchableOpacity>
+                }
+
             </LinearGradient>
 
             {/* Bottom Section */ }
-            <View style={ styles.bottomSection }>
-                <View style={ styles.row }>
-                    <View style={ styles.actionCard }>
-                        <Image
-                            source={ {
-                                uri: "https://cdn-icons-png.flaticon.com/512/929/929430.png",
-                            } }
-                            style={ styles.actionIcon }
-                        />
-                        <Text style={ styles.actionLabel }>FUND RECEIVED</Text>
-                        <Text style={ styles.amount }>$2,450.00</Text>
-                    </View>
+            {
+                !modalVisible && <View style={ styles.bottomSection }>
+                    <View style={ styles.row }>
+                        <View style={ styles.actionCard }>
+                            <Image
+                                source={ {
+                                    uri: "https://cdn-icons-png.flaticon.com/512/929/929430.png",
+                                } }
+                                style={ styles.actionIcon }
+                            />
+                            <Text style={ styles.actionLabel }>FUND RECEIVED</Text>
+                            <Text style={ styles.amount }>${ funds?.funds_received || "0.00" }</Text>
+                        </View>
 
-                    <View style={ [ styles.actionCard, { backgroundColor: "#E0F2FE" } ] }>
-                        <Image
-                            source={ {
-                                uri: "https://cdn-icons-png.flaticon.com/512/929/929440.png",
-                            } }
-                            style={ styles.actionIcon }
-                        />
-                        <Text style={ styles.actionLabel }>FUND SPENT</Text>
-                        <Text style={ [ styles.amount, { color: "#0284C7" } ] }>
-                            $1,890.50
-                        </Text>
+                        <View style={ [ styles.actionCard, { backgroundColor: "#E0F2FE" } ] }>
+                            <Image
+                                source={ {
+                                    uri: "https://cdn-icons-png.flaticon.com/512/929/929440.png",
+                                } }
+                                style={ styles.actionIcon }
+                            />
+                            <Text style={ styles.actionLabel }>FUND SPENT</Text>
+                            <Text style={ [ styles.amount, { color: "#0284C7" } ] }>
+                                ${ funds?.funds_spent || "0.00" }
+                            </Text>
+                        </View>
                     </View>
                 </View>
-            </View>
+
+            }
 
             {/* Wallet Modal */ }
             <Modal
@@ -127,34 +152,46 @@ const HomeScreen: React.FC = () => {
 
                         {/* Row 1 */ }
                         <View style={ styles.summaryCard }>
-                            <Text style={ styles.summaryLabel }>Funds Received</Text>
-                            <View style={ styles.summaryRight }>
-                                <Text style={ styles.summaryAmount }>$4,250.00</Text>
-                                <View style={ styles.circleIcon }>
-                                    <Text style={ { color: "#fff", fontWeight: "700" } }>↓</Text>
-                                </View>
+                            <View>
+
+                                <Text style={ styles.summaryLabel }>Funds Received</Text>
+                                <Text style={ styles.summaryAmount }>
+                                    ${ funds?.funds_received || "0.00" }
+                                </Text>
+                            </View>
+
+                            <View>
+                                <SvgImages.CircleArrowDownSVG />
                             </View>
                         </View>
 
                         {/* Row 2 */ }
                         <View style={ styles.summaryCard }>
-                            <Text style={ styles.summaryLabel }>Funds Spent</Text>
-                            <View style={ styles.summaryRight }>
-                                <Text style={ styles.summaryAmount }>$1,876.50</Text>
-                                <View style={ styles.circleIcon }>
-                                    <Text style={ { color: "#fff", fontWeight: "700" } }>↑</Text>
-                                </View>
+                            <View>
+
+                                <Text style={ styles.summaryLabel }>Funds Spent</Text>
+                                <Text style={ styles.summaryAmount }>
+                                    ${ funds?.funds_spent || "0.00" }
+                                </Text>
+                            </View>
+
+                            <View>
+                                <SvgImages.CircleArrowUpSVG />
                             </View>
                         </View>
 
                         {/* Row 3 */ }
                         <View style={ styles.summaryCard }>
-                            <Text style={ styles.summaryLabel }>Remaining Balance</Text>
-                            <View style={ styles.summaryRight }>
-                                <Text style={ styles.summaryAmount }>$2,373.50</Text>
-                                <View style={ styles.circleIcon }>
-                                    <Text style={ { color: "#fff", fontWeight: "700" } }>💳</Text>
-                                </View>
+                            <View>
+
+                                <Text style={ styles.summaryLabel }>Remaining Balance</Text>
+                                <Text style={ styles.summaryAmount }>
+                                    ${ funds?.remaining_balance || "0.00" }
+                                </Text>
+                            </View>
+
+                            <View>
+                                <SvgImages.BalanceSVG />
                             </View>
                         </View>
 
@@ -171,6 +208,7 @@ const HomeScreen: React.FC = () => {
         </SafeAreaView>
     );
 };
+
 
 const styles = StyleSheet.create( {
     container: { flex: 1, backgroundColor: "#F9FAFB" },
@@ -205,7 +243,7 @@ const styles = StyleSheet.create( {
 
     walletCard: {
         marginHorizontal: 16,
-        backgroundColor:colors.walletColor,
+        backgroundColor: colors.walletColor,
         borderRadius: 20,
         padding: 20,
         flexDirection: "row",
@@ -235,20 +273,20 @@ const styles = StyleSheet.create( {
     modalOverlay: {
         flex: 1,
         justifyContent: "flex-end",
-        
+
     },
     modalContent: {
         backgroundColor: "#fff",
         borderTopLeftRadius: 24,
         borderTopRightRadius: 24,
         padding: 20,
-        height:hp(70),
+        height: hp( 70 ),
     },
     modalTitle: { fontSize: 18, fontWeight: "700", marginBottom: 20 },
     summaryCard: {
         backgroundColor: "#F8FAFC",
         borderRadius: 12,
-        padding: 16,
+        padding: 30,
         marginBottom: 12,
         flexDirection: "row",
         justifyContent: "space-between",

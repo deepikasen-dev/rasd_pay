@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import CustomButton from "../../../components/CustomButton";
 import OTPInput from "../../../components/OTPInput";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import otherStrings from "../../../utils/otherStrings";
 import SvgImages from "../../../utils/svgImages";
 import Routes from "../../../utils/Routes";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { verifyCode } from "../../../redux/slices/authSlice";
 
 type Props = NativeStackScreenProps<any>;
 
-const VerifyCodeScreen: React.FC<Props> = ( { navigation } ) => {
+const VerifyCodeScreen: React.FC<Props> = ( { navigation, route } ) => {
     const [ code, setCode ] = useState( Array( 4 ).fill( "" ) ); // 4-digit OTP
     const [ error, setError ] = useState( false );
     const [ timer, setTimer ] = useState( 60 );
+    const dispatch = useDispatch<AppDispatch>();
+    const { loading } = useSelector( ( state: RootState ) => state.auth );
+
+    // email comes from SignInScreen navigation
+    const email = route.params?.email;
 
     // Countdown
     useEffect( () => {
@@ -22,14 +30,28 @@ const VerifyCodeScreen: React.FC<Props> = ( { navigation } ) => {
         }
     }, [ timer ] );
 
-    const handleContinue = () => {
+    const handleContinue = async () => {
         const enteredCode = code.join( "" );
-        if ( enteredCode === "1234" ) {
+
+        if ( enteredCode.length < 4 ) {
+            setError( true );
+            return;
+        }
+
+        const result = await dispatch(
+            verifyCode( { email, otp_code: enteredCode } )
+        );
+
+        if ( verifyCode.fulfilled.match( result ) ) {
             setError( false );
-            console.log( "✅ Code verified!" );
-            navigation.navigate(Routes.BOTTOM_STACK);
+            console.log( "✅ Code verified, user:", result.payload.data.user );
+            navigation.reset( {
+                index: 0,
+                routes: [ { name: Routes.BOTTOM_STACK } ],
+            } );
         } else {
             setError( true );
+            Alert.alert( "Error", "Invalid code, please try again." );
         }
     };
 
@@ -40,26 +62,24 @@ const VerifyCodeScreen: React.FC<Props> = ( { navigation } ) => {
                 style={ styles.backBtn }
                 onPress={ () => navigation.goBack() }
             >
-                <SvgImages.BackSVG/>
+                <SvgImages.BackSVG />
             </TouchableOpacity>
 
             {/* Icon */ }
             <View style={ styles.iconWrapper }>
-               <SvgImages.VerifyCodeSVG />
+                <SvgImages.VerifyCodeSVG />
             </View>
 
             <Text style={ styles.title }>Enter Verification Code</Text>
             <Text style={ styles.subtitle }>
-                We’ve sent a 4 digit code to your email
+                We’ve sent a 4 digit code to your email { email }
             </Text>
 
             {/* OTPInput component */ }
             <OTPInput length={ 4 } code={ code } setCode={ setCode } error={ error } />
 
             {/* Error */ }
-            { error && (
-                <Text style={ styles.errorText }>Invalid code, try again</Text>
-            ) }
+            { error && <Text style={ styles.errorText }>Invalid code, try again</Text> }
 
             {/* Resend */ }
             <TouchableOpacity
@@ -78,7 +98,11 @@ const VerifyCodeScreen: React.FC<Props> = ( { navigation } ) => {
             </TouchableOpacity>
 
             <View style={ styles.buttonWrapper }>
-                <CustomButton title={otherStrings.continue} onPress={ handleContinue } />
+                <CustomButton
+                    title={ loading ? "Verifying..." : otherStrings.continue }
+                    onPress={ handleContinue }
+                    disabled={ loading }
+                />
             </View>
         </View>
     );
@@ -114,6 +138,7 @@ const styles = StyleSheet.create( {
         fontSize: 14,
         color: "#6B7A8C",
         marginBottom: 32,
+        textAlign: "center",
     },
     errorText: {
         color: "#FF4D4F",
