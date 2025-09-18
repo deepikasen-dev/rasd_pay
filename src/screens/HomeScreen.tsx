@@ -39,9 +39,7 @@ const HomeScreen: React.FC = () => {
             setColor( colors.primary1 );
             // ✅ Fetch fresh user details when screen is focused
             dispatch( fetchUserDetails() );
-            return () => {
-                setColor( colors.lightBG );
-            };
+            
         }, [dispatch] )
     );
    

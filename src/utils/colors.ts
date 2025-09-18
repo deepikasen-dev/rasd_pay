@@ -16,7 +16,7 @@ const colors = {
     cardBg: '#E2EFFF',
     card2Bg: '#D8F4FF',
     switchOff:'#B0BABF',
-    
+    tabBG:"#F3F4F5",
     
     
 }

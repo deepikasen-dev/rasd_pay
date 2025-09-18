@@ -5,12 +5,15 @@ import {
     FlatList,
     StyleSheet,
     TouchableOpacity,
+    Alert,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { getNotifications } from "../redux/slices/notificationSlice";
+import { deleteNotification, getNotifications } from "../redux/slices/notificationSlice";
 import { RootState, AppDispatch } from "../redux/store";
 import moment from "moment";
 import svgImages from "../utils/svgImages";
+import colors from "../utils/colors";
+import { hp } from "../utils/globalUse";
 
 
 const SVG_ICONS: any = {
@@ -36,7 +39,7 @@ const NotificationsScreen: React.FC = () => {
             <View style={ styles.card }>
                 {/* Left SVG Icon */ }
                 <View style={ styles.iconWrapper }>
-                    <Icon width={ 24 } height={ 24 } />
+                    <Icon/>
                 </View>
 
                 {/* Notification Content */ }
@@ -54,7 +57,24 @@ const NotificationsScreen: React.FC = () => {
                     <Text style={ styles.date }>
                         { moment( item.created_at ).fromNow() }
                     </Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={ () =>
+                        Alert.alert(
+                            "Delete Notification",
+                            "Are you sure you want to delete this notification?",
+                            [
+                                { text: "Cancel", style: "cancel" },
+                                {
+                                    text: "Delete",
+                                    style: "destructive",
+                                    onPress: () => {
+                                        console.log(item.id)
+                                        dispatch( deleteNotification( item.id ) )
+                                    }
+                                    ,
+                                },
+                            ]
+                        )
+                    }>
                         <svgImages.DustBinSVG width={ 18 } height={ 18 } />
                     </TouchableOpacity>
                 </View>
@@ -79,7 +99,6 @@ const NotificationsScreen: React.FC = () => {
 
     return (
         <View style={ styles.container }>
-            <Text style={ styles.header }>Notifications</Text>
             { loading ? (
                 <Text>Loading...</Text>
             ) : (
@@ -95,7 +114,7 @@ const NotificationsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create( {
-    container: { flex: 1, backgroundColor: "#F9FAFB", padding: 16 },
+    container: { flex: 1, backgroundColor: colors.bg, padding: 16 },
     header: { fontSize: 20, fontWeight: "700", marginBottom: 16, color: "#1E3A8A" },
 
     card: {
@@ -103,18 +122,16 @@ const styles = StyleSheet.create( {
         alignItems: "center",
         backgroundColor: "#fff",
         borderRadius: 12,
-        padding: 12,
-        marginBottom: 12,
-        shadowColor: "#000",
-        shadowOpacity: 0.05,
-        shadowRadius: 4,
-        elevation: 2,
+        paddingHorizontal: hp(1),
+        marginBottom: hp(2),
+        borderColor: colors.borderColor,
+        paddingVertical:hp(2),
+        borderWidth:1, 
     },
     iconWrapper: {
         width: 36,
         height: 36,
         borderRadius: 8,
-        backgroundColor: "#F3F4F6",
         justifyContent: "center",
         alignItems: "center",
         marginRight: 12,
@@ -125,9 +142,8 @@ const styles = StyleSheet.create( {
     rightSection: {
         alignItems: "flex-end",
         justifyContent: "space-between",
-        height: "100%",
     },
-    date: { fontSize: 11, color: "#9CA3AF", marginBottom: 6 },
+    date: { fontSize: 11, color:"black", marginBottom: 6 },
 } );
 
 export default NotificationsScreen;

@@ -9,7 +9,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useFocusEffect } from '@react-navigation/native';
 import { useStatusBarColor } from '../../context';
 import SvgImages from '../../utils/svgImages';
-
 // import { useNavigation } from '@react-navigation/native';
 
 type Props = NativeStackScreenProps<RootStackParamList, typeof Routes.SPALSH>;
