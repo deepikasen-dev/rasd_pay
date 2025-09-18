@@ -34,7 +34,11 @@ import ProfileCameraSVG from '../assets/svgs/ProfileCamera.svg';
 import ChevronDownSVG from '../assets/svgs/ChevronDown.svg';
 import ButtonOnSVG from '../assets/svgs/ButtonOn.svg';
 import ButtonOffSVG from '../assets/svgs/ButtonOff.svg';
-
+import CustomerSupportSVG from '../assets/svgs/CustomerSupport.svg';
+import EmailOffSVG from '../assets/svgs/EmailOff.svg';
+import EmailOnSVG from '../assets/svgs/EmailOn.svg';
+import PhoneOffSVG from '../assets/svgs/PhoneOff.svg';
+import PhoneOnSVG from '../assets/svgs/PhoneOn.svg';
 
 export default {
     AppLogoSVG,
@@ -72,5 +76,10 @@ export default {
     CameraSVG,
     ChevronDownSVG,
     ButtonOnSVG,
-    ButtonOffSVG
+    ButtonOffSVG,
+    CustomerSupportSVG,
+    EmailOffSVG,
+    EmailOnSVG,
+    PhoneOffSVG,
+    PhoneOnSVG,
 };

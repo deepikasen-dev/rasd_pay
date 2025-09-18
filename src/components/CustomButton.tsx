@@ -28,7 +28,7 @@ const CustomButton: React.FC<CustomButtonProps> = ( {
                 colors={
                     disabled
                         ? [ colors.primary1 + "80", colors.secondory + "80", colors.secondory + "80" ] // Slightly transparent colors when disabled
-                        : [ colors.primary1, colors.secondory, colors.secondory ]
+                        : [ colors.primary1, colors.secondory ]
                 }
                 start={ { x: 0, y: 0 } }
                 end={ { x: 1, y: 1 } }

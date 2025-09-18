@@ -12,7 +12,7 @@ import SignInScreen from "../screens/Auth/SignIn";
 import VerifyCodeScreen from "../screens/Auth/VerifyCode";
 import BottomTabs from "./BottomTabs";
 import { loadToken, fetchUserDetails } from "../redux/slices/authSlice";
-import { ActivityIndicator, View } from "react-native";
+// import { ActivityIndicator, View } from "react-native";
 
 export type RootStackParamList = {
     [ Routes.SPALSH ]: undefined;
@@ -28,7 +28,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AppNavigator = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const { token, user, restoring } = useSelector( ( state: RootState ) => state.auth );
+    const { token, user } = useSelector( ( state: RootState ) => state.auth );
 
     useEffect( () => {
         dispatch( loadToken() ).then( ( res: any ) => {
@@ -39,13 +39,13 @@ const AppNavigator = () => {
     }, [ dispatch ] );
 
 
-    if ( restoring ) {
-        return (
-            <View style={ { flex: 1, justifyContent: "center", alignItems: "center" } }>
-                <ActivityIndicator size="large" color="#048EC3" />
-            </View>
-        );
-    }
+    // if ( restoring ) {
+    //     return (
+    //         <View style={ { flex: 1, justifyContent: "center", alignItems: "center" } }>
+    //             <ActivityIndicator size="large" color="#048EC3" />
+    //         </View>
+    //     );
+    // }
 
 
     return (

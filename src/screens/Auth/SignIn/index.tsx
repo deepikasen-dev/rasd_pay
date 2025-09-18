@@ -16,6 +16,8 @@ import Routes from "../../../utils/Routes";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { sendVerificationCode } from "../../../redux/slices/authSlice";
+import { hp, wp } from "../../../utils/globalUse";
+import LinearGradient from "react-native-linear-gradient";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -102,6 +104,7 @@ console.log(result);
                     ] }
                     onPress={ () => setSelectedTab( "email" ) }
                 >
+                    <svgImages.EmailOffSVG/>
                     <Text
                         style={ [
                             styles.tabText,
@@ -110,6 +113,13 @@ console.log(result);
                     >
                         Email
                     </Text>
+                    <LinearGradient
+                        colors={ [ colors.primary1, colors.secondory ] }  
+                        start={ { x: 0, y: 0 } }
+                        end={ { x: 1, y: 1 } }>
+                        
+                        </LinearGradient>
+
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -119,6 +129,7 @@ console.log(result);
                     ] }
                     onPress={ () => setSelectedTab( "phone" ) }
                 >
+                    <svgImages.PhoneOffSVG/>
                     <Text
                         style={ [
                             styles.tabText,
@@ -163,7 +174,8 @@ console.log(result);
 
             {/* Support */ }
             <TouchableOpacity style={ styles.support }>
-                <Text style={ styles.supportText }>💬 Customer Support</Text>
+                <svgImages.CustomerSupportSVG/>
+                <Text style={ styles.supportText }>Customer Support</Text>
             </TouchableOpacity>
         </View>
     );
@@ -173,14 +185,14 @@ const styles = StyleSheet.create( {
     container: {
         flex: 1,
         backgroundColor: colors.bg,
-        padding: 20,
-        paddingTop: 100,
+        padding: wp(4),
+        paddingTop: hp(10),
         alignItems: "center",
     },
     logo: {
-        width: 80,
-        height: 80,
-        marginBottom: 24,
+        // width: 80,
+        // height: 80,
+        marginBottom: hp(3),
         resizeMode: "contain",
     },
     title: {
@@ -197,18 +209,26 @@ const styles = StyleSheet.create( {
     tabRow: {
         flexDirection: "row",
         marginBottom: 16,
+        backgroundColor: colors.inputField,
+        height: hp( 8 ),
+        alignItems: "center",
+        justifyContent: 'center',
+        paddingHorizontal: 12,
+        borderRadius: 8,
     },
     tab: {
         flex: 1,
-        paddingVertical: 12,
-        borderWidth: 1,
-        borderColor: "#E0E6ED",
         borderRadius: 8,
         alignItems: "center",
+        justifyContent: 'center',
+        height: hp( 6 ),
+        flexDirection: 'row',
+        gap:wp(3)
     },
     tabActive: {
-        backgroundColor: "#E9F7FA",
+     
         borderColor: "#048EC3",
+        borderWidth: 1,
     },
     tabText: {
         fontSize: 16,
@@ -252,6 +272,9 @@ const styles = StyleSheet.create( {
         backgroundColor: "#F0F6FA",
         borderRadius: 8,
         alignItems: "center",
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap:wp(3)
     },
     supportText: {
         color: "#048EC3",
