@@ -27,6 +27,13 @@ import BudgetWarningSVG from '../assets/svgs/BudgetWarning.svg';
 import DustBinSVG from '../assets/svgs/Dustbin.svg';
 import LogOutSVG from '../assets/svgs/LogOut.svg';
 import EyeOnSVG from '../assets/svgs/EyeOn.svg';
+import HomeHeaderSVG from '../assets/svgs/HomeHeaderImg.svg';
+import DownloadSVG from '../assets/svgs/Download.svg';
+import CameraSVG from '../assets/svgs/Camera.svg';
+import ProfileCameraSVG from '../assets/svgs/ProfileCamera.svg';
+import ChevronDownSVG from '../assets/svgs/ChevronDown.svg';
+import ButtonOnSVG from '../assets/svgs/ButtonOn.svg';
+import ButtonOffSVG from '../assets/svgs/ButtonOff.svg';
 
 
 export default {
@@ -59,4 +66,11 @@ export default {
     DustBinSVG,
     LogOutSVG,
     EyeOnSVG,
+    HomeHeaderSVG,
+    DownloadSVG,
+    ProfileCameraSVG,
+    CameraSVG,
+    ChevronDownSVG,
+    ButtonOnSVG,
+    ButtonOffSVG
 };

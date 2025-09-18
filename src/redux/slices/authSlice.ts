@@ -77,6 +77,37 @@ export const fetchUserDetails = createAsyncThunk<
         return rejectWithValue( err.message );
     }
 } );
+// 🔹 Update User Settings
+export const updateUserSetting = createAsyncThunk<
+    ApiResponse<{ user: User }>, // response contains updated user
+    Partial<User>,               // payload is partial user data
+    { rejectValue: string }
+>(
+    "auth/updateUserSetting",
+    async ( payload, { getState, rejectWithValue } ) => {
+        try {
+            const state = getState() as RootState;
+            const token = state.auth.token;
+            if ( !token ) throw new Error( "No token found" );
+
+            const response: ApiResponse<{ user: User }> = await apiRequest(
+                "/updateUserSetting",
+                "POST",
+                payload,
+                token
+            );
+
+            if ( !response.success ) {
+                return rejectWithValue( response.message );
+            }
+
+            return response;
+        } catch ( err: any ) {
+            return rejectWithValue( err.message || "Failed to update settings" );
+        }
+    }
+);
+
 
 // 🔹 Logout → clear token
 export const logout = createAsyncThunk( "auth/logout", async () => {
@@ -164,6 +195,21 @@ const authSlice = createSlice( {
                 state.loading = false;
                 state.error = action.payload || "Failed to fetch user";
             } )
+
+            // updateUserSetting
+            .addCase( updateUserSetting.pending, ( state ) => {
+                state.loading = true;
+            } )
+            .addCase( updateUserSetting.fulfilled, ( state, action ) => {
+                state.loading = false;
+                // ✅ merge new settings into user object
+                state.user = { ...state.user, ...action.payload.data.user };
+            } )
+            .addCase( updateUserSetting.rejected, ( state, action ) => {
+                state.loading = false;
+                state.error = action.payload || "Failed to update settings";
+            } )
+
 
             // logout
             .addCase( logout.fulfilled, ( state ) => {

@@ -4,25 +4,29 @@ import {
     Text,
     Image,
     StyleSheet,
-    TouchableOpacity,
-    SafeAreaView,
     Modal,
     Pressable,
+    ImageBackground,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import LinearGradient from "react-native-linear-gradient";
 import colors from "../utils/colors";
 import { useStatusBarColor } from "../context";
 import { useFocusEffect } from "@react-navigation/native";
-import { hp } from "../utils/globalUse";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import globalUse, { hp, wp } from "../utils/globalUse";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
 import SvgImages from "../utils/svgImages";
 import NotificationBell from "../components/NotificationBell";
+import { fetchUserDetails } from "../redux/slices/authSlice";
+import WalletCard from "../components/WalletCard";
+import ActionCard from "../components/ActionCard";
 
 
 const HomeScreen: React.FC = () => {
     const [ modalVisible, setModalVisible ] = useState( false );
     const { setColor } = useStatusBarColor();
+    const dispatch = useDispatch<AppDispatch>();
 
     // ✅ Get user & funds from Redux
     const user = useSelector( ( state: RootState ) => state.auth.user );
@@ -33,20 +37,30 @@ const HomeScreen: React.FC = () => {
     useFocusEffect(
         React.useCallback( () => {
             setColor( colors.primary1 );
+            // ✅ Fetch fresh user details when screen is focused
+            dispatch( fetchUserDetails() );
             return () => {
                 setColor( colors.lightBG );
             };
-        }, [] )
+        }, [dispatch] )
     );
+   
 
     return (
         <SafeAreaView style={ styles.container }>
             {/* Top Section with Gradient */ }
+            
             <LinearGradient
                 colors={ [ colors.primary1, colors.secondory ] }
                 style={ styles.headerBackground }
-            >
+                >
+                {/* <SvgImages.HomeHeaderSVG/> */}
                 {/* Top Row: Profile + Notifications */ }
+                <ImageBackground
+                    source={ require( '../assets/pngs/HomeHeaderIMG.png' ) }
+                    style={ { width: globalUse.WIDTH } }
+                    resizeMode="cover"
+                >
                 <View style={ styles.topRow }>
                     <View style={ styles.userInfo }>
                         <Image
@@ -68,53 +82,43 @@ const HomeScreen: React.FC = () => {
 
                 </View>
 
-                {/* Wallet Card */ }
-                { !modalVisible && <TouchableOpacity
-                    style={ styles.walletCard }
-                    activeOpacity={ 0.8 }
-                    onPress={ () => setModalVisible( true ) }
-                >
-                    <View>
-                        <Text style={ styles.walletLabel }>My Wallet</Text>
-                        <Text style={ styles.balance }>
-                            ${ funds?.remaining_balance || "0.00" }
-                        </Text>
-                        <Text style={ styles.subText }>Total balance</Text>
-                        <Text style={ styles.cardName }>{ user?.name }</Text>
-                    </View>
-                    <Image
-                        source={ {
-                            uri: "https://cdn-icons-png.flaticon.com/512/84/84510.png",
-                        } }
-                        style={ styles.qrIcon }
-                    />
-                </TouchableOpacity>
-                }
+                
 
+
+            </ImageBackground>
             </LinearGradient>
+            {/* Wallet Card */ }
+            { !modalVisible && (
+                <WalletCard
+                    balance={ funds?.remaining_balance || "0.00" }
+                    userName={ user?.name || "Guest" }
+                    onPress={ () => setModalVisible( true ) }
+                />
+            ) }
 
             {/* Bottom Section */ }
             {
                 !modalVisible && <View style={ styles.bottomSection }>
                     <View style={ styles.row }>
-                        <View style={ styles.actionCard }>
-                            
-                            <SvgImages.FundReceivedSVG style={ styles.actionIcon } />
-                            <Text style={ styles.actionLabel }>FUND RECEIVED</Text>
-                            <Text style={ styles.amount }>${ funds?.funds_received || "0.00" }</Text>
-                        </View>
-
-                        <View style={ [ styles.actionCard, { backgroundColor: "#E0F2FE" } ] }>
-                            <SvgImages.FundSpentSVG style={ styles.actionIcon } />
-                            <Text style={ styles.actionLabel }>FUND SPENT</Text>
-                            <Text style={ [ styles.amount, { color: "#0284C7" } ] }>
-                                ${ funds?.funds_spent || "0.00" }
-                            </Text>
-                        </View>
+                        <ActionCard
+                            icon={ <SvgImages.FundReceivedSVG /> }
+                            label="FUND RECEIVED"
+                            amount={ funds?.funds_received || "0.00" }
+                            onPress={ () => setModalVisible( true ) }
+                        />
+                        <ActionCard
+                            icon={ <SvgImages.FundSpentSVG  /> }
+                            label="FUND SPENT"
+                            amount={ funds?.funds_spent || "0.00" }
+                            backgroundColor={colors.card2Bg}
+                            amountColor={colors.color2}
+                            onPress={ () => setModalVisible( true ) }
+                        />
                     </View>
                 </View>
 
-            }
+                }
+                
 
             {/* Wallet Modal */ }
             <Modal
@@ -176,118 +180,92 @@ const HomeScreen: React.FC = () => {
                         <Pressable
                             style={ styles.closeButton }
                             onPress={ () => setModalVisible( false ) }
-                        >
+                            >
                             <Text style={ styles.closeText }>Close</Text>
                         </Pressable>
-                    </View>
                 </View>
-            </Modal>
+                            </View>
+                </Modal>
+                
         </SafeAreaView>
     );
 };
 
 
 const styles = StyleSheet.create( {
-    container: { flex: 1, backgroundColor: "#F9FAFB" },
+    container: { flex: 1, backgroundColor:colors.bg },
     headerBackground: {
-        paddingBottom: 100,
-        borderBottomLeftRadius: 24,
-        borderBottomRightRadius: 24,
+        paddingBottom: hp(10),
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10, 
+        height:hp(30),
     },
     topRow: {
         flexDirection: "row",
         justifyContent: "space-between",
         paddingHorizontal: 16,
-        marginBottom: 20,
+        marginVertical: 20,
         alignItems: "center",
+        marginTop:hp(5),
+
     },
     userInfo: { flexDirection: "row", alignItems: "center" },
-    avatar: { width: 48, height: 48, borderRadius: 24, marginRight: 12 },
-    welcome: { color: "#fff", fontSize: 14 },
-    username: { color: "#fff", fontSize: 18, fontWeight: "600" },
+    avatar: { width: wp(10), height: wp(10), borderRadius: 24, marginRight: 12, backgroundColor:colors.primaryText },
+    welcome: { color: colors.primaryText, fontSize: wp(3) },
+    username: { color:colors.cardDark, fontSize: wp(4), fontWeight: "600" },
     notificationWrapper: { position: "relative" },
     notificationIcon: { width: 28, height: 28, tintColor: "#fff" },
     badge: {
         position: "absolute",
         top: -6,
         right: -6,
-        backgroundColor: "#EF4444",
+        backgroundColor: colors.errorText,
         borderRadius: 10,
         paddingHorizontal: 6,
         paddingVertical: 2,
     },
     badgeText: { color: "#fff", fontSize: 10, fontWeight: "700" },
 
-    walletCard: {
-        marginHorizontal: 16,
-        backgroundColor: colors.primaryText,
-        borderRadius: 20,
-        padding: 20,
-        flexDirection: "row",
-        justifyContent: "space-between",
-    },
-    walletLabel: { color: "#fff", fontSize: 14, marginBottom: 6 },
-    balance: { color: "#fff", fontSize: 28, fontWeight: "700" },
-    subText: { color: "#CBD5E1", fontSize: 12, marginBottom: 8 },
-    cardName: { color: "#fff", fontSize: 14 },
-    qrIcon: { width: 24, height: 24, tintColor: "#fff" },
 
-    bottomSection: { marginTop: -60, paddingHorizontal: 16 },
+    bottomSection: { paddingHorizontal: wp(2), gap:wp(2), marginTop:hp(2) },
     row: { flexDirection: "row", justifyContent: "space-between" },
-    actionCard: {
-        flex: 1,
-        backgroundColor: "#F1F5F9",
-        marginHorizontal: 4,
-        borderRadius: 16,
-        padding: 16,
-        alignItems: "center",
-    },
-    actionIcon: { width: 32, height: 32, marginBottom: 8, tintColor: "#0369A1" },
-    actionLabel: { fontSize: 12, fontWeight: "600", color: "#334155" },
-    amount: { fontSize: 16, fontWeight: "700", marginTop: 6, color: "#0F172A" },
-
+   
     // Modal Styles
     modalOverlay: {
         flex: 1,
-        justifyContent: "flex-end",
-
+        justifyContent:"center",
     },
     modalContent: {
         backgroundColor: "#fff",
         borderTopLeftRadius: 24,
         borderTopRightRadius: 24,
         padding: 20,
-        height: hp( 70 ),
+        height:hp(60)
     },
     modalTitle: { fontSize: 18, fontWeight: "700", marginBottom: 20 },
     summaryCard: {
         backgroundColor: "#F8FAFC",
         borderRadius: 12,
-        padding: 30,
+        paddingHorizontal: hp( 3 ),
+        paddingVertical:hp(1),
         marginBottom: 12,
         flexDirection: "row",
         justifyContent: "space-between",
-        alignItems: "center",
+        // alignItems: "center",
+
     },
-    summaryLabel: { fontSize: 14, color: "#475569" },
-    summaryAmount: { fontSize: 16, fontWeight: "700", color: "#0F172A" },
+    summaryLabel: { fontSize: 14, color: "#475569", marginVertical:hp(0.5) },
+    summaryAmount: { fontSize: wp( 5 ), fontWeight: "700", color: "#000000", marginVertical: hp( 0.5 ) },
     summaryRight: { flexDirection: "row", alignItems: "center", gap: 12 },
-    circleIcon: {
-        width: 32,
-        height: 32,
-        borderRadius: 16,
-        backgroundColor: "#06B6D4",
-        justifyContent: "center",
-        alignItems: "center",
-    },
+    
     closeButton: {
         marginTop: 10,
-        backgroundColor: "#0F172A",
+        backgroundColor: "#F8FAFC",
         padding: 12,
         borderRadius: 10,
         alignItems: "center",
     },
-    closeText: { color: "#fff", fontWeight: "600" },
+    closeText: { color: colors.primaryText, fontWeight: "600" },
 } );
 
 export default HomeScreen;

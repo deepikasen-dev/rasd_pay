@@ -13,6 +13,8 @@ import { AppDispatch, RootState } from "../redux/store";
 import { clearSelectedExpense, fetchExpenseDetails } from "../redux/slices/expenseSlice";
 import colors from "../utils/colors";
 import CustomButton from "../components/CustomButton";
+import svgImages from "../utils/svgImages";
+import { hp } from "../utils/globalUse";
 
 type RootStackParamList = {
     ReceiptDetails: { id: number };
@@ -62,8 +64,6 @@ const ReceiptDetailsScreen: React.FC = () => {
 
     return (
         <View style={ styles.container }>
-            <Text style={ styles.header }>Details</Text>
-
             <View style={ styles.card }>
                 <Text style={ styles.label }>Submitted date</Text>
                 <View style={ styles.row }>
@@ -102,8 +102,8 @@ const ReceiptDetailsScreen: React.FC = () => {
             </View>
 
             <View style={ styles.button } >
-            <CustomButton title="Download Receipt" onPress={()=>console.log("")
-            }/>
+                <CustomButton title="Download Receipt" onPress={ () => console.log( "" )
+                } icon={ <svgImages.DownloadSVG/>} />
            </View>
         </View>
     );
@@ -117,7 +117,8 @@ const styles = StyleSheet.create( {
         borderRadius: 16,
         padding: 16,
         marginBottom: 16,
-        borderColor:colors.borderColor
+        borderColor: colors.borderColor,
+       borderWidth:1,
     },
     label: { color: "#666", marginTop: 8 },
     text: { fontSize: 16 },
@@ -131,16 +132,20 @@ const styles = StyleSheet.create( {
     pending: { backgroundColor: "#FEF3C7", color: "#B45309" },
     approved: { backgroundColor: "#DCFCE7", color: "#166534" },
     rejected: { backgroundColor: "#FEE2E2", color: "#991B1B" },
-    amount: { fontSize: 18, fontWeight: "700", color: "#1E3A8A" },
+    amount: { fontSize: 18, fontWeight: "700", color: colors.primaryText },
     receiptBox: {
-        backgroundColor: "#f1f1f1",
-        height: 180,
+        backgroundColor: colors.lightBG,
+        height: hp(30),
         borderRadius: 16,
         justifyContent: "center",
         alignItems: "center",
         marginBottom: 16,
+        borderColor: colors.borderColor,
+        borderWidth:1,
     },
-    receiptImage: { width: "100%", height: "100%", borderRadius: 16 },
+    receiptImage: {
+        width: "90%", height: "90%", borderRadius: 16, backgroundColor: "#f1f1f1", borderColor: colors.borderColor,
+        borderWidth: 1, },
     placeholder: { color: "#999" },
     button: {
         borderRadius: 16,

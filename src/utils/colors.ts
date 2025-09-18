@@ -10,7 +10,13 @@ const colors = {
     pendingBG: '#FFEDD8',
     pendingText: '#D97706',
     primaryText: '#002D62',
-    borderColor:'#E0E0E0',
+    borderColor: '#E0E0E0',
+    cardDark: '#1E1E1E',
+    color2: '#048EC3',
+    cardBg: '#E2EFFF',
+    card2Bg: '#D8F4FF',
+    switchOff:'#B0BABF',
+    
     
     
 }
