@@ -39,6 +39,9 @@ import EmailOffSVG from '../assets/svgs/EmailOff.svg';
 import EmailOnSVG from '../assets/svgs/EmailOn.svg';
 import PhoneOffSVG from '../assets/svgs/PhoneOff.svg';
 import PhoneOnSVG from '../assets/svgs/PhoneOn.svg';
+import USflagSVG from '../assets/svgs/USflag.svg';
+import SAflagSVG from '../assets/svgs/SAflag.svg';
+import RightSVG from '../assets/svgs/Right.svg';
 
 export default {
     AppLogoSVG,
@@ -82,4 +85,8 @@ export default {
     EmailOnSVG,
     PhoneOffSVG,
     PhoneOnSVG,
+    USflagSVG,
+    SAflagSVG,
+    RightSVG
+
 };

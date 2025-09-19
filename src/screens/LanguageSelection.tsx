@@ -7,6 +7,8 @@ import Routes from "../utils/Routes";
 import SvgImages from "../utils/svgImages";
 import { useDispatch } from "react-redux";
 import { setLanguage } from "../redux/slices/languageSlice";
+import { hp, wp } from "../utils/globalUse";
+import colors from "../utils/colors";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -39,7 +41,17 @@ const LanguageSelectionScreen: React.FC<Props> = ( { navigation } ) => {
                 ] }
                 onPress={ () => setSelected( "en" ) }
             >
+                <View style={ {
+                    flexDirection: 'row',
+                    gap: wp( 4 ),
+                } }>
+                <SvgImages.USflagSVG/>
                 <Text style={ styles.languageText }>{ otherStrings.languageUS }</Text>
+                </View>
+                {
+                    selected === "en" &&
+                <SvgImages.RightSVG/>
+                }
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -49,7 +61,17 @@ const LanguageSelectionScreen: React.FC<Props> = ( { navigation } ) => {
                 ] }
                 onPress={ () => setSelected( "ar" ) }
             >
+                <View style={ {
+                    flexDirection: 'row',
+                    gap: wp( 4 ),
+}}>
+                <SvgImages.SAflagSVG/>
                 <Text style={ styles.languageText }>{ otherStrings.languageSA }</Text>
+                </View>
+                {
+                    selected === "ar" &&
+                    <SvgImages.RightSVG />
+                }
             </TouchableOpacity>
 
             <View style={ styles.buttonWrapper }>
@@ -63,47 +85,53 @@ const LanguageSelectionScreen: React.FC<Props> = ( { navigation } ) => {
 const styles = StyleSheet.create( {
     container: {
         flex: 1,
-        backgroundColor: "#F7FDFF",
-        padding: 20,
-        paddingTop: 100,
+        backgroundColor: colors.bg,
+        padding: wp(3),
+        paddingTop: hp(10),
         alignItems:'center'
     },
     logo: {
-        width: 80,
-        height: 80,
-        marginBottom: 24,
+        // width: 80,
+        // height: 80,
+        marginBottom: hp(2),
         resizeMode: "contain",
     },
     title: {
-        fontSize: 20,
-        fontWeight: "700",
-        color: "#1C2C3A",
-        marginBottom: 8,
+        fontSize: wp(6),
+        fontWeight: "600",
+        color: colors.primaryText,
+        margin: hp(1),
     },
     subtitle: {
-        fontSize: 14,
+        fontSize: wp(4),
         color: "#6B7A8C",
-        marginBottom: 24,
+        marginTop: hp( 1 ),
+        marginBottom:hp(2),
     },
     languageOption: {
-        borderWidth: 1,
-        borderColor: "#E0E6ED",
-        padding: 16,
+        borderWidth: 2,
+        borderColor: colors.borderColor,
+        paddingHorizontal: wp(3),
+        paddingVertical: hp(3),
         borderRadius: 12,
-        marginBottom: 12,
-        width:'100%'
+        marginBottom: hp(2),
+        width: '100%',
+        backgroundColor: colors.lightBG,
+        flexDirection: 'row',
+        justifyContent:'space-between'
     },
     selectedOption: {
-        borderColor: "#048EC3",
-        backgroundColor: "#E9F7FA",
+        borderColor: colors.secondory,
+        backgroundColor: colors.lightBG,
+        borderWidth:2,
     },
     languageText: {
-        fontSize: 16,
-        fontWeight: "500",
-        color: "#1C2C3A",
+        fontSize: wp(4),
+        fontWeight: "700",
+        color: colors.primaryText,
     },
     buttonWrapper: {
-        marginTop: 24,
+        marginTop: hp(2),
         width:'100%'
     },
 } );
