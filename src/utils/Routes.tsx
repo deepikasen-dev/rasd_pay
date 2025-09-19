@@ -19,6 +19,9 @@ const Routes = {
   HOME_STACK: 'HomeStack',
   BOTTOM_STACK: 'BottomStack',
   UPLOAD: 'Upload',
+  EXPENSES_TAB: 'ExpensesTab',
+  PROFILE_TAB: 'ProfileTab',
+  
 };
 
 export default Routes;
