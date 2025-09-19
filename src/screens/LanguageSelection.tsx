@@ -1,143 +1,146 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import CustomButton from "../components/CustomButton";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import otherStrings from "../utils/otherStrings";
-import Routes from "../utils/Routes";
-import SvgImages from "../utils/svgImages";
-import { useDispatch } from "react-redux";
-import { setLanguage } from "../redux/slices/languageSlice";
-import { hp, wp } from "../utils/globalUse";
-import colors from "../utils/colors";
-import { setAppLanguage } from "../utils/setLocale";
+/**
+ * @file src/screens/LanguageSelection.tsx
+ * @description Screen component rendered within app navigation.
+ * @lastUpdated 2025-09-19T11:33:09.032Z
+ */
+
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import CustomButton from '../components/CustomButton';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import otherStrings from '../utils/otherStrings';
+import Routes from '../utils/Routes';
+import SvgImages from '../utils/svgImages';
+import { useDispatch } from 'react-redux';
+import { setLanguage } from '../redux/slices/languageSlice';
+import { hp, wp } from '../utils/globalUse';
+import colors from '../utils/colors';
+import { setAppLanguage } from '../utils/setLocale';
 
 type Props = NativeStackScreenProps<any>;
 
-const LanguageSelectionScreen: React.FC<Props> = ( { navigation } ) => {
-    const [ selected, setSelected ] = useState<string>( "en-US" );
-    const dispatch = useDispatch();
+const LanguageSelectionScreen: React.FC<Props> = ({ navigation }) => {
+  const [selected, setSelected] = useState<string>('en-US');
+  const dispatch = useDispatch();
 
-    // Mapping language → ID
-    const languageMap: Record<string, string> = {
-        "en-US": "1",
-        "ar-SA": "2",
-    };
+  // Mapping language → ID
+  const languageMap: Record<string, string> = {
+    'en-US': '1',
+    'ar-SA': '2',
+  };
 
-    const handleContinue = () => {
-        const languageId = languageMap[ selected ];
-        dispatch( setLanguage( languageId ) ); // ✅ store in Redux
+  const handleContinue = () => {
+    const languageId = languageMap[selected];
+    dispatch(setLanguage(languageId)); // ✅ store in Redux
 
-        // Set localization
-        setAppLanguage( languageId );
-        navigation.navigate( Routes.SIGN_IN );
-    };
+    // Set localization
+    setAppLanguage(languageId);
+    navigation.navigate(Routes.SIGN_IN);
+  };
 
-    return (
-        <View style={ styles.container }>
-            <SvgImages.AppLogoSVG style={ styles.logo } />
-            <Text style={ styles.title }>{ otherStrings.chooseLanguage }</Text>
-            <Text style={ styles.subtitle }>{ otherStrings.selectLanguage }</Text>
+  return (
+    <View style={styles.container}>
+      <SvgImages.AppLogoSVG style={styles.logo} />
+      <Text style={styles.title}>{otherStrings.chooseLanguage}</Text>
+      <Text style={styles.subtitle}>{otherStrings.selectLanguage}</Text>
 
-            <TouchableOpacity
-                style={ [
-                    styles.languageOption,
-                    selected === "en-US" && styles.selectedOption,
-                ] }
-                onPress={ () => setSelected( "en-US" ) }
-            >
-                <View style={ {
-                    flexDirection: 'row',
-                    gap: wp( 4 ),
-                } }>
-                <SvgImages.USflagSVG/>
-                <Text style={ styles.languageText }>{ otherStrings.languageUS }</Text>
-                </View>
-                {
-                    selected === "en-US" &&
-                <SvgImages.RightSVG/>
-                }
-            </TouchableOpacity>
-
-            <TouchableOpacity
-                style={ [
-                    styles.languageOption,
-                    selected === "ar-SA" && styles.selectedOption,
-                ] }
-                onPress={ () => setSelected( "ar-SA" ) }
-            >
-                <View style={ {
-                    flexDirection: 'row',
-                    gap: wp( 4 ),
-}}>
-                <SvgImages.SAflagSVG/>
-                <Text style={ styles.languageText }>{ otherStrings.languageSA }</Text>
-                </View>
-                {
-                    selected === "ar-SA" &&
-                    <SvgImages.RightSVG />
-                }
-            </TouchableOpacity>
-
-            <View style={ styles.buttonWrapper }>
-                <CustomButton title={ otherStrings.continue } onPress={ handleContinue } />
-            </View>
+      <TouchableOpacity
+        style={[
+          styles.languageOption,
+          selected === 'en-US' && styles.selectedOption,
+        ]}
+        onPress={() => setSelected('en-US')}
+      >
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: wp(4),
+          }}
+        >
+          <SvgImages.USflagSVG />
+          <Text style={styles.languageText}>{otherStrings.languageUS}</Text>
         </View>
-    );
+        {selected === 'en-US' && <SvgImages.RightSVG />}
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[
+          styles.languageOption,
+          selected === 'ar-SA' && styles.selectedOption,
+        ]}
+        onPress={() => setSelected('ar-SA')}
+      >
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: wp(4),
+          }}
+        >
+          <SvgImages.SAflagSVG />
+          <Text style={styles.languageText}>{otherStrings.languageSA}</Text>
+        </View>
+        {selected === 'ar-SA' && <SvgImages.RightSVG />}
+      </TouchableOpacity>
+
+      <View style={styles.buttonWrapper}>
+        <CustomButton title={otherStrings.continue} onPress={handleContinue} />
+      </View>
+    </View>
+  );
 };
 
-
-const styles = StyleSheet.create( {
-    container: {
-        flex: 1,
-        backgroundColor: colors.bg,
-        padding: wp(3),
-        paddingTop: hp(10),
-        alignItems:'center'
-    },
-    logo: {
-        // width: 80,
-        // height: 80,
-        marginBottom: hp(2),
-        resizeMode: "contain",
-    },
-    title: {
-        fontSize: wp(6),
-        fontWeight: "600",
-        color: colors.primaryText,
-        margin: hp(1),
-    },
-    subtitle: {
-        fontSize: wp(4),
-        color: "#6B7A8C",
-        marginTop: hp( 1 ),
-        marginBottom:hp(2),
-    },
-    languageOption: {
-        borderWidth: 2,
-        borderColor: colors.borderColor,
-        paddingHorizontal: wp(3),
-        paddingVertical: hp(3),
-        borderRadius: 12,
-        marginBottom: hp(2),
-        width: '100%',
-        backgroundColor: colors.lightBG,
-        flexDirection: 'row',
-        justifyContent:'space-between'
-    },
-    selectedOption: {
-        borderColor: colors.secondory,
-        backgroundColor: colors.lightBG,
-        borderWidth:2,
-    },
-    languageText: {
-        fontSize: wp(4),
-        fontWeight: "700",
-        color: colors.primaryText,
-    },
-    buttonWrapper: {
-        marginTop: hp(2),
-        width:'100%'
-    },
-} );
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.bg,
+    padding: wp(3),
+    paddingTop: hp(10),
+    alignItems: 'center',
+  },
+  logo: {
+    // width: 80,
+    // height: 80,
+    marginBottom: hp(2),
+    resizeMode: 'contain',
+  },
+  title: {
+    fontSize: wp(6),
+    fontWeight: '600',
+    color: colors.primaryText,
+    margin: hp(1),
+  },
+  subtitle: {
+    fontSize: wp(4),
+    color: '#6B7A8C',
+    marginTop: hp(1),
+    marginBottom: hp(2),
+  },
+  languageOption: {
+    borderWidth: 2,
+    borderColor: colors.borderColor,
+    paddingHorizontal: wp(3),
+    paddingVertical: hp(3),
+    borderRadius: 12,
+    marginBottom: hp(2),
+    width: '100%',
+    backgroundColor: colors.lightBG,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  selectedOption: {
+    borderColor: colors.secondory,
+    backgroundColor: colors.lightBG,
+    borderWidth: 2,
+  },
+  languageText: {
+    fontSize: wp(4),
+    fontWeight: '700',
+    color: colors.primaryText,
+  },
+  buttonWrapper: {
+    marginTop: hp(2),
+    width: '100%',
+  },
+});
 
 export default LanguageSelectionScreen;

@@ -1,3 +1,9 @@
+/**
+ * @file src/components/ExpenseCard.tsx
+ * @description Reusable UI component for the app.
+ * @lastUpdated 2025-09-19T11:33:09.011Z
+ */
+
 // import React from "react";
 // import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // import ExpensesScreen from "../screens/ExpensesScreen";

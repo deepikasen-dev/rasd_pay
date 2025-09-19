@@ -1,225 +1,258 @@
+/**
+ * @file src/redux/slices/authSlice.ts
+ * @description Redux state management logic (slice/store/selectors).
+ * @lastUpdated 2025-09-19T11:33:09.024Z
+ */
+
 // src/store/authSlice.ts
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { apiRequest } from "../../api/api";
-import { ApiResponse } from "../../types/api";
-import { User, Funds } from "../../types/user";
-import { RootState } from "../store";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { apiRequest } from '../../api/api';
+import { ApiResponse } from '../../types/api';
+import { User, Funds } from '../../types/user';
+import { RootState } from '../store';
 
 // 🔹 Send Verification Code
+/**
+ * Send a verification code to the user via email or phone.
+ * - Resolves with optional OTP (for debug/dev scenarios) when success is true.
+ * - Rejects with a user-friendly message on failure.
+ */
 export const sendVerificationCode = createAsyncThunk<
-    ApiResponse<{ otp?: string }>,
-    { language_id: string; email?: string; country_code?: string; phone_number?: string },
-    { rejectValue: { message: string } }
->( "auth/sendVerificationCode", async ( payload, { rejectWithValue } ) => {
-    try {
-        const response: ApiResponse<{ otp?: string }> = await apiRequest(
-            "/sendVerificationCode",
-            "POST",
-            payload
-        );
+  ApiResponse<{ otp?: string }>,
+  {
+    language_id: string;
+    email?: string;
+    country_code?: string;
+    phone_number?: string;
+  },
+  { rejectValue: { message: string } }
+>('auth/sendVerificationCode', async (payload, { rejectWithValue }) => {
+  try {
+    const response: ApiResponse<{ otp?: string }> = await apiRequest(
+      '/sendVerificationCode',
+      'POST',
+      payload,
+    );
 
-        if ( !response.success ) {
-            return rejectWithValue( { message: response.message } );
-        }
-
-        return response;
-    } catch ( err: any ) {
-        return rejectWithValue( { message: err.message || "Something went wrong" } );
+    if (!response.success) {
+      return rejectWithValue({ message: response.message });
     }
-} );
+
+    return response;
+  } catch (err: any) {
+    return rejectWithValue({ message: err.message || 'Something went wrong' });
+  }
+});
 
 // 🔹 Verify Code
+/**
+ * Verify the OTP code received by the user and exchange it for an access token.
+ * Also persists the token to AsyncStorage on success.
+ */
 export const verifyCode = createAsyncThunk<
-    ApiResponse<{ user: User; access_token: string }>,
-    { email: string; otp_code: string },
-    { rejectValue: string }
->( "auth/verifyCode", async ( payload, { rejectWithValue } ) => {
-    try {
-        const data: ApiResponse<{ user: User; access_token: string }> =
-            await apiRequest( "/verifyCode", "POST", payload );
+  ApiResponse<{ user: User; access_token: string }>,
+  { email: string; otp_code: string },
+  { rejectValue: string }
+>('auth/verifyCode', async (payload, { rejectWithValue }) => {
+  try {
+    const data: ApiResponse<{ user: User; access_token: string }> =
+      await apiRequest('/verifyCode', 'POST', payload);
 
-        if ( data?.data?.access_token ) {
-            await AsyncStorage.setItem( "token", data.data.access_token );
-        }
-
-        return data;
-    } catch ( err: any ) {
-        return rejectWithValue( err.message );
+    if (data?.data?.access_token) {
+      await AsyncStorage.setItem('token', data.data.access_token);
     }
-} );
+
+    return data;
+  } catch (err: any) {
+    return rejectWithValue(err.message);
+  }
+});
 
 // 🔹 Load token at app startup
-export const loadToken = createAsyncThunk( "auth/loadToken", async () => {
-    const token = await AsyncStorage.getItem( "token" );
-    return token;
-} );
+/**
+ * Load previously persisted access token during app startup/restoration.
+ */
+export const loadToken = createAsyncThunk('auth/loadToken', async () => {
+  const token = await AsyncStorage.getItem('token');
+  return token;
+});
 
 // 🔹 Fetch User Details
+/**
+ * Fetch the authenticated user's profile and funds using the stored token.
+ */
 export const fetchUserDetails = createAsyncThunk<
-    ApiResponse<{ user: User; funds: Funds }>,
-    void,
-    { rejectValue: string }
->( "auth/fetchUserDetails", async ( _, { getState, rejectWithValue } ) => {
-    try {
-        const state = getState() as RootState;
-        const token = state.auth.token;
-        if ( !token ) throw new Error( "No token found" );
+  ApiResponse<{ user: User; funds: Funds }>,
+  void,
+  { rejectValue: string }
+>('auth/fetchUserDetails', async (_, { getState, rejectWithValue }) => {
+  try {
+    const state = getState() as RootState;
+    const token = state.auth.token;
+    if (!token) throw new Error('No token found');
 
-        const data: ApiResponse<{ user: User; funds: Funds }> = await apiRequest(
-            "/fetchUserDetails",
-            "GET",
-            undefined,
-            token
-        );
-        return data;
-    } catch ( err: any ) {
-        return rejectWithValue( err.message );
-    }
-} );
+    const data: ApiResponse<{ user: User; funds: Funds }> = await apiRequest(
+      '/fetchUserDetails',
+      'GET',
+      undefined,
+      token,
+    );
+    return data;
+  } catch (err: any) {
+    return rejectWithValue(err.message);
+  }
+});
 // 🔹 Update User Settings
+/**
+ * Update user settings on the server and merge the response into local user state.
+ */
 export const updateUserSetting = createAsyncThunk<
-    ApiResponse<{ user: User }>, // response contains updated user
-    Partial<User>,               // payload is partial user data
-    { rejectValue: string }
->(
-    "auth/updateUserSetting",
-    async ( payload, { getState, rejectWithValue } ) => {
-        try {
-            const state = getState() as RootState;
-            const token = state.auth.token;
-            if ( !token ) throw new Error( "No token found" );
+  ApiResponse<{ user: User }>, // response contains updated user
+  Partial<User>, // payload is partial user data
+  { rejectValue: string }
+>('auth/updateUserSetting', async (payload, { getState, rejectWithValue }) => {
+  try {
+    const state = getState() as RootState;
+    const token = state.auth.token;
+    if (!token) throw new Error('No token found');
 
-            const response: ApiResponse<{ user: User }> = await apiRequest(
-                "/updateUserSetting",
-                "POST",
-                payload,
-                token
-            );
+    const response: ApiResponse<{ user: User }> = await apiRequest(
+      '/updateUserSetting',
+      'POST',
+      payload,
+      token,
+    );
 
-            if ( !response.success ) {
-                return rejectWithValue( response.message );
-            }
-
-            return response;
-        } catch ( err: any ) {
-            return rejectWithValue( err.message || "Failed to update settings" );
-        }
+    if (!response.success) {
+      return rejectWithValue(response.message);
     }
-);
 
+    return response;
+  } catch (err: any) {
+    return rejectWithValue(err.message || 'Failed to update settings');
+  }
+});
 
 // 🔹 Logout → clear token
-export const logout = createAsyncThunk( "auth/logout", async () => {
-    await AsyncStorage.removeItem( "token" );
-    return null;
-} );
+/**
+ * Clear the persisted token and reset auth-related state.
+ */
+export const logout = createAsyncThunk('auth/logout', async () => {
+  await AsyncStorage.removeItem('token');
+  return null;
+});
 
+/**
+ * Auth state shape stored in Redux.
+ */
 interface AuthState {
-    loading: boolean;
-    restoring: boolean;
-    error: string | null;
-    token: string | null;
-    user: User | null;
-    funds: Funds | null;
+  loading: boolean;
+  restoring: boolean;
+  error: string | null;
+  token: string | null;
+  user: User | null;
+  funds: Funds | null;
 }
 
 const initialState: AuthState = {
-    loading: false,
-    restoring: true,
-    error: null,
-    token: null,
-    user: null,
-    funds: null,
+  loading: false,
+  restoring: true,
+  error: null,
+  token: null,
+  user: null,
+  funds: null,
 };
 
-const authSlice = createSlice( {
-    name: "auth",
-    initialState,
-    reducers: {
-        clearError: ( state ) => {
-            state.error = null;
-        },
+/**
+ * Slice handling authentication lifecycle: OTP, token, user/funds, and logout.
+ */
+const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
+    /** Clear any existing error message. */
+    clearError: state => {
+      state.error = null;
     },
-    extraReducers: ( builder ) => {
-        builder
-            // send OTP
-            .addCase( sendVerificationCode.pending, ( state ) => {
-                state.loading = true;
-            } )
-            .addCase( sendVerificationCode.fulfilled, ( state ) => {
-                state.loading = false;
-            } )
-            .addCase( sendVerificationCode.rejected, ( state, action ) => {
-                state.loading = false;
-                state.error = action.payload?.message || "Failed to send OTP";
-            } )
+  },
+  extraReducers: builder => {
+    builder
+      // send OTP
+      .addCase(sendVerificationCode.pending, state => {
+        state.loading = true;
+      })
+      .addCase(sendVerificationCode.fulfilled, state => {
+        state.loading = false;
+      })
+      .addCase(sendVerificationCode.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || 'Failed to send OTP';
+      })
 
-    
-            // verify OTP
-            .addCase( verifyCode.pending, ( state ) => {
-                state.loading = true;
-            } )
-            .addCase( verifyCode.fulfilled, ( state, action ) => {
-                state.loading = false;
-                state.token = action.payload.data.access_token;
-                state.user = action.payload.data.user; // ✅ hydrate user immediately
-            } )
-            .addCase( verifyCode.rejected, ( state, action ) => {
-                state.loading = false;
-                state.error = action.payload || "Failed to verify code";
-            } )
+      // verify OTP
+      .addCase(verifyCode.pending, state => {
+        state.loading = true;
+      })
+      .addCase(verifyCode.fulfilled, (state, action) => {
+        state.loading = false;
+        state.token = action.payload.data.access_token;
+        state.user = action.payload.data.user; // ✅ hydrate user immediately
+      })
+      .addCase(verifyCode.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to verify code';
+      })
 
-            // load saved token
-            .addCase( loadToken.pending, ( state ) => {
-                state.restoring = true;
-                state.error = null;
-            } )
-            .addCase( loadToken.fulfilled, ( state, action ) => {
-                state.token = action.payload;
-                state.restoring = false;
-            } )
-            .addCase( loadToken.rejected, ( state ) => {
-                state.restoring = false;
-            } )
+      // load saved token
+      .addCase(loadToken.pending, state => {
+        state.restoring = true;
+        state.error = null;
+      })
+      .addCase(loadToken.fulfilled, (state, action) => {
+        state.token = action.payload;
+        state.restoring = false;
+      })
+      .addCase(loadToken.rejected, state => {
+        state.restoring = false;
+      })
 
-            // fetch user details
-            .addCase( fetchUserDetails.pending, ( state ) => {
-                state.loading = true;
-            } )
-            .addCase( fetchUserDetails.fulfilled, ( state, action ) => {
-                state.loading = false;
-                state.user = action.payload.data.user;
-                state.funds = action.payload.data.funds;
-            } )
-            .addCase( fetchUserDetails.rejected, ( state, action ) => {
-                state.loading = false;
-                state.error = action.payload || "Failed to fetch user";
-            } )
+      // fetch user details
+      .addCase(fetchUserDetails.pending, state => {
+        state.loading = true;
+      })
+      .addCase(fetchUserDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.data.user;
+        state.funds = action.payload.data.funds;
+      })
+      .addCase(fetchUserDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to fetch user';
+      })
 
-            // updateUserSetting
-            .addCase( updateUserSetting.pending, ( state ) => {
-                state.loading = true;
-            } )
-            .addCase( updateUserSetting.fulfilled, ( state, action ) => {
-                state.loading = false;
-                // ✅ merge new settings into user object
-                state.user = { ...state.user, ...action.payload.data.user };
-            } )
-            .addCase( updateUserSetting.rejected, ( state, action ) => {
-                state.loading = false;
-                state.error = action.payload || "Failed to update settings";
-            } )
+      // updateUserSetting
+      .addCase(updateUserSetting.pending, state => {
+        state.loading = true;
+      })
+      .addCase(updateUserSetting.fulfilled, (state, action) => {
+        state.loading = false;
+        // ✅ merge new settings into user object
+        state.user = { ...state.user, ...action.payload.data.user };
+      })
+      .addCase(updateUserSetting.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to update settings';
+      })
 
-
-            // logout
-            .addCase( logout.fulfilled, ( state ) => {
-                state.token = null;
-                state.user = null;
-                state.funds = null;
-            } );
-    },
-} );
+      // logout
+      .addCase(logout.fulfilled, state => {
+        state.token = null;
+        state.user = null;
+        state.funds = null;
+      });
+  },
+});
 
 export const { clearError } = authSlice.actions;
 export default authSlice.reducer;
