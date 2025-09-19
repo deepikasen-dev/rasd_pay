@@ -97,14 +97,19 @@ console.log(result);
 
             {/* Tabs */ }
             <View style={ styles.tabRow }>
-                <TouchableOpacity
-                    style={ [
-                        styles.tab,
-                        selectedTab === "email" && styles.tabActive,
-                    ] }
+                { selectedTab === "email" ?
+               ( <LinearGradient
+                        colors={ [ colors.primary1, colors.secondory ] }
+                        start={ { x: 0, y: 0 } }
+                        end={ { x: 1, y: 1 } }
+                        style={ styles.tabActive }>
+                        <TouchableOpacity
+                            style={
+                                styles.tab
+                            }
                     onPress={ () => setSelectedTab( "email" ) }
                 >
-                    <svgImages.EmailOffSVG/>
+                    <svgImages.EmailOnSVG/>
                     <Text
                         style={ [
                             styles.tabText,
@@ -113,57 +118,104 @@ console.log(result);
                     >
                         Email
                     </Text>
-                    <LinearGradient
-                        colors={ [ colors.primary1, colors.secondory ] }  
-                        start={ { x: 0, y: 0 } }
-                        end={ { x: 1, y: 1 } }>
                         
-                        </LinearGradient>
 
                 </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={ [
-                        styles.tab,
-                        selectedTab === "phone" && styles.tabActive,
-                    ] }
-                    onPress={ () => setSelectedTab( "phone" ) }
-                >
-                    <svgImages.PhoneOffSVG/>
-                    <Text
-                        style={ [
-                            styles.tabText,
-                            selectedTab === "phone" && styles.tabTextActive,
-                        ] }
+                        </LinearGradient>)
+                
+                    :
+                    (<TouchableOpacity
+                        style={ 
+                            styles.tab
+                         }
+                        onPress={ () => setSelectedTab( "email" ) }
                     >
-                        Phone
-                    </Text>
-                </TouchableOpacity>
+                        <svgImages.EmailOffSVG />
+                        <Text
+                            style={ [
+                                styles.tabText,
+                                selectedTab === "email" && styles.tabTextActive,
+                            ] }
+                        >
+                            Email
+                        </Text>
+
+                    </TouchableOpacity>)
+                }
+                { selectedTab === "phone" ?
+                    ( <LinearGradient
+                        colors={ [ colors.primary1, colors.secondory ] }
+                        start={ { x: 0, y: 0 } }
+                        end={ { x: 1, y: 1 } }
+                        style={ styles.tabActive }>
+                        <TouchableOpacity
+                            style={
+                                styles.tab
+                            }
+                            onPress={ () => setSelectedTab( "phone" ) }
+                        >
+                            <svgImages.PhoneOnSVG />
+                            <Text
+                                style={ [
+                                    styles.tabText,
+                                    selectedTab === "phone" && styles.tabTextActive,
+                                ] }
+                            >
+                                Phone
+                            </Text>
+                        </TouchableOpacity>
+                    </LinearGradient> )
+
+                    :
+                    ( <TouchableOpacity
+                        style={
+                            styles.tab
+                        }
+                        onPress={ () => setSelectedTab( "phone" ) }
+                    >
+                        <svgImages.PhoneOffSVG />
+                        <Text
+                            style={ [
+                                styles.tabText,
+                                selectedTab === "phone" && styles.tabTextActive,
+                            ] }
+                        >
+                            Phone
+                        </Text>
+                    </TouchableOpacity> )
+                }
+               
             </View>
 
             {/* Input */ }
             { selectedTab === "email" ? (
+                <View style={ styles.inputArea}>
+                <Text style={styles.inputTitle}>Email Address</Text>
                 <TextInput
                     placeholder="Enter your email"
                     style={ styles.input }
                     keyboardType="email-address"
                     value={ email }
                     onChangeText={ setEmail }
-                />
+                    />
+                    </View>
             ) : (
+                <View style={styles.inputArea }>
+                        <Text style={styles.inputTitle}>Phone Number</Text>
                 <TextInput
                     placeholder="Enter your phone number"
                     style={ styles.input }
                     keyboardType="phone-pad"
                     value={ phone }
                     onChangeText={ setPhone }
-                />
+                        />
+                        </View>
             ) }
 
             {/* Remember me */ }
             <View style={ styles.rememberRow }>
                 <TouchableOpacity style={ styles.checkbox } />
-                <Text style={ styles.rememberText }>Remember me</Text>
+                <Text style={ styles.inputTitle }>Remember me</Text>
             </View>
 
             <CustomButton
@@ -196,24 +248,24 @@ const styles = StyleSheet.create( {
         resizeMode: "contain",
     },
     title: {
-        fontSize: 20,
+        fontSize: wp(6),
         fontWeight: "700",
-        color: "#1C2C3A",
-        marginBottom: 8,
+        color: colors.primaryText,
+        marginBottom: hp(1),
     },
     subtitle: {
-        fontSize: 14,
+        fontSize: wp(4),
         color: "#6B7A8C",
-        marginBottom: 24,
+        marginBottom: hp(3),
     },
     tabRow: {
         flexDirection: "row",
-        marginBottom: 16,
+        marginBottom: hp(2),
         backgroundColor: colors.inputField,
         height: hp( 8 ),
         alignItems: "center",
         justifyContent: 'center',
-        paddingHorizontal: 12,
+        paddingHorizontal: wp(2),
         borderRadius: 8,
     },
     tab: {
@@ -221,37 +273,42 @@ const styles = StyleSheet.create( {
         borderRadius: 8,
         alignItems: "center",
         justifyContent: 'center',
-        height: hp( 6 ),
+        // height: hp( 5.2 ),
         flexDirection: 'row',
         gap:wp(3)
     },
     tabActive: {
-     
-        borderColor: "#048EC3",
-        borderWidth: 1,
+        width: wp( 40 ),
+        borderRadius: 12,
+        height:hp(5),
     },
     tabText: {
-        fontSize: 16,
-        color: "#6B7A8C",
-    },
-    tabTextActive: {
-        color: "#048EC3",
+        fontSize: wp(4.5),
+        color: colors.primaryText,
         fontWeight: "600",
     },
-    input: {
-        width: "100%",
-        borderWidth: 1,
-        borderColor: "#E0E6ED",
-        borderRadius: 8,
-        padding: 14,
-        marginBottom: 12,
-        fontSize: 16,
-        color: "#1C2C3A",
+    tabTextActive: {
+        color: colors.lightBG,
+        fontWeight: "600",
     },
+    inputArea: { width: "100%", gap: hp( 2 ) },
+    input: {
+        // width: "100%",
+        borderWidth: 1,
+        borderColor: colors.borderColor,
+        borderRadius: 8,
+        padding: hp(2),
+        marginBottom: hp(2),
+        fontSize: wp(4),
+        color: colors.borderColor,
+        backgroundColor:colors.cardContainerBG,
+    },
+    inputTitle: { color: colors.primaryText, fontSize:wp(4), fontWeight:"500", },
     rememberRow: {
         flexDirection: "row",
         alignItems: "flex-start",
-        marginBottom: 24,
+        width: "100%",
+        marginBottom: hp(2),
     },
     checkbox: {
         width: 20,
@@ -267,9 +324,9 @@ const styles = StyleSheet.create( {
     },
     support: {
         width: "100%",
-        marginTop: 20,
-        paddingVertical: 12,
-        backgroundColor: "#F0F6FA",
+        marginTop: hp(2),
+        paddingVertical: hp(2),
+        backgroundColor: colors.btn2bg,
         borderRadius: 8,
         alignItems: "center",
         flexDirection: 'row',
@@ -278,7 +335,7 @@ const styles = StyleSheet.create( {
     },
     supportText: {
         color: "#048EC3",
-        fontSize: 15,
+        fontSize: wp(3.8),
         fontWeight: "500",
     },
 } );

@@ -15,10 +15,12 @@ const colors = {
     color2: '#048EC3',
     cardBg: '#E2EFFF',
     card2Bg: '#D8F4FF',
+    btn2bg: '#EAF4FF',
     switchOff:'#B0BABF',
     tabBG: "#F3F4F5",
     badgeColor: '#E55986',
-    inputField:'#F1F5F9'
+    inputField: '#F1F5F9',
+    cardContainerBG:'#F9FAFB',
     
     
 }
