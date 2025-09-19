@@ -31,10 +31,6 @@ export async function apiRequest<T>(
 
   const token = await AsyncStorage.getItem('token');
 
-  // Debug logging for visibility during development
-  console.log(endpoint, ' endpoint ');
-  console.log(body, ' body ');
-  console.log(params, ' params ');
 
   const response = await fetch(url, {
     method,
@@ -44,8 +40,7 @@ export async function apiRequest<T>(
     },
     body: body ? JSON.stringify(body) : undefined,
   });
-  // Response object for quick inspection
-  console.log(response);
+
 
   if (!response.ok) {
     throw new Error(`API error: ${response.status}`);

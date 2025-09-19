@@ -50,12 +50,10 @@ const SignInScreen: React.FC<Props> = ({ navigation }) => {
       const result = await dispatch(
         sendVerificationCode({ language_id, email }),
       );
-      console.log(result);
+     
 
       if (sendVerificationCode.fulfilled.match(result)) {
-        // ✅ success
-
-        console.log(sendVerificationCode.fulfilled.match(result));
+  
 
         navigation.navigate(Routes.VERIFY_CODE, { email });
       } else if (sendVerificationCode.rejected.match(result)) {

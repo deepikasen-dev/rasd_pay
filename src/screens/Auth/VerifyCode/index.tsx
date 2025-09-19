@@ -50,16 +50,15 @@ const VerifyCodeScreen: React.FC<Props> = ({ navigation, route }) => {
     const result = await dispatch(verifyCode({ email, otp_code: enteredCode }));
 
     if (verifyCode.fulfilled.match(result)) {
-      console.log(verifyCode.fulfilled);
+
 
       setError(false);
-      console.log('✅ Code verified, user:', result.payload.data.user);
+
       navigation.reset({
         index: 0,
         routes: [{ name: Routes.BOTTOM_STACK }],
       });
     } else {
-      console.log(verifyCode.fulfilled);
       setError(true);
       Alert.alert('Error', 'Invalid code, please try again.');
     }

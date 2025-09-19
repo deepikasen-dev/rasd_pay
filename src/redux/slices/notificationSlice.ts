@@ -93,12 +93,12 @@ const notificationsSlice = createSlice({
       .addCase(
         deleteNotification.fulfilled,
         (state, action: PayloadAction<{ id: number }>) => {
-          console.log(action, ' action');
+     
           state.list = state.list.filter(n => n.id !== action.payload.id);
         },
       )
       .addCase(deleteNotification.rejected, (state, action) => {
-        console.log('..rejected');
+  
         state.error = action.payload ?? 'Delete failed';
       });
   },

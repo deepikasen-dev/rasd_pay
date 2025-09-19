@@ -76,7 +76,7 @@ const NotificationsScreen: React.FC = () => {
                     text: 'Delete',
                     style: 'destructive',
                     onPress: () => {
-                      console.log(item.id);
+            
                       dispatch(deleteNotification(item.id));
                     },
                   },
