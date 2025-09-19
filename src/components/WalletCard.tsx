@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { hp, wp } from "../utils/globalUse";
 import colors from "../utils/colors";
+import strings from "../utils/strings";
 
 type Props = {
     balance: string | number;
@@ -28,10 +29,10 @@ const WalletCard: React.FC<Props> = ( { balance, userName, onPress } ) => {
 
             {/* Wallet Info */ }
             <View style={ styles.walletInfo }>
-                <Text style={ styles.walletLabel }>My Wallet</Text>
+                <Text style={ styles.walletLabel }>{strings.myWallet}</Text>
                 <View>
                     <Text style={ styles.balance }>${ balance }</Text>
-                    <Text style={ styles.subText }>Total balance</Text>
+                    <Text style={ styles.subText }>{strings.totalBalance}</Text>
                 </View>
                 <Text style={ styles.cardName }>{ userName }</Text>
             </View>

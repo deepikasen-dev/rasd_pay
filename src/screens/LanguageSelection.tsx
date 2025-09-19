@@ -9,22 +9,26 @@ import { useDispatch } from "react-redux";
 import { setLanguage } from "../redux/slices/languageSlice";
 import { hp, wp } from "../utils/globalUse";
 import colors from "../utils/colors";
+import { setAppLanguage } from "../utils/setLocale";
 
 type Props = NativeStackScreenProps<any>;
 
 const LanguageSelectionScreen: React.FC<Props> = ( { navigation } ) => {
-    const [ selected, setSelected ] = useState<string>( "en" );
+    const [ selected, setSelected ] = useState<string>( "en-US" );
     const dispatch = useDispatch();
 
     // Mapping language → ID
     const languageMap: Record<string, string> = {
-        en: "1",
-        ar: "2",
+        "en-US": "1",
+        "ar-SA": "2",
     };
 
     const handleContinue = () => {
         const languageId = languageMap[ selected ];
         dispatch( setLanguage( languageId ) ); // ✅ store in Redux
+
+        // Set localization
+        setAppLanguage( languageId );
         navigation.navigate( Routes.SIGN_IN );
     };
 
@@ -37,9 +41,9 @@ const LanguageSelectionScreen: React.FC<Props> = ( { navigation } ) => {
             <TouchableOpacity
                 style={ [
                     styles.languageOption,
-                    selected === "en" && styles.selectedOption,
+                    selected === "en-US" && styles.selectedOption,
                 ] }
-                onPress={ () => setSelected( "en" ) }
+                onPress={ () => setSelected( "en-US" ) }
             >
                 <View style={ {
                     flexDirection: 'row',
@@ -49,7 +53,7 @@ const LanguageSelectionScreen: React.FC<Props> = ( { navigation } ) => {
                 <Text style={ styles.languageText }>{ otherStrings.languageUS }</Text>
                 </View>
                 {
-                    selected === "en" &&
+                    selected === "en-US" &&
                 <SvgImages.RightSVG/>
                 }
             </TouchableOpacity>
@@ -57,9 +61,9 @@ const LanguageSelectionScreen: React.FC<Props> = ( { navigation } ) => {
             <TouchableOpacity
                 style={ [
                     styles.languageOption,
-                    selected === "ar" && styles.selectedOption,
+                    selected === "ar-SA" && styles.selectedOption,
                 ] }
-                onPress={ () => setSelected( "ar" ) }
+                onPress={ () => setSelected( "ar-SA" ) }
             >
                 <View style={ {
                     flexDirection: 'row',
@@ -69,7 +73,7 @@ const LanguageSelectionScreen: React.FC<Props> = ( { navigation } ) => {
                 <Text style={ styles.languageText }>{ otherStrings.languageSA }</Text>
                 </View>
                 {
-                    selected === "ar" &&
+                    selected === "ar-SA" &&
                     <SvgImages.RightSVG />
                 }
             </TouchableOpacity>

@@ -21,6 +21,7 @@ import NotificationBell from "../components/NotificationBell";
 import { fetchUserDetails } from "../redux/slices/authSlice";
 import WalletCard from "../components/WalletCard";
 import ActionCard from "../components/ActionCard";
+import strings from "../utils/strings";
 
 
 const HomeScreen: React.FC = () => {
@@ -71,7 +72,7 @@ const HomeScreen: React.FC = () => {
                         />
                         {/* <Image source={ { uri: "invoices/user_11/profile_68ca628951577_2025-09-17.jpg" } } style={ styles.avatar } /> */ }
                         <View>
-                            <Text style={ styles.welcome }>Welcome Back</Text>
+                            <Text style={ styles.welcome }>{strings.welcomeBack}</Text>
                             <Text style={ styles.username }>{ user?.name || "Guest" }</Text>
                         </View>
                     </View>
@@ -100,13 +101,13 @@ const HomeScreen: React.FC = () => {
                     <View style={ styles.row }>
                         <ActionCard
                             icon={ <SvgImages.FundReceivedSVG /> }
-                            label="FUND RECEIVED"
+                            label={strings.fundReceived}
                             amount={ funds?.funds_received || "0.00" }
                             onPress={ () => setModalVisible( true ) }
                         />
                         <ActionCard
                             icon={ <SvgImages.FundSpentSVG  /> }
-                            label="FUND SPENT"
+                            label={strings.fundSpent}
                             amount={ funds?.funds_spent || "0.00" }
                             backgroundColor={colors.card2Bg}
                             amountColor={colors.color2}
@@ -127,13 +128,13 @@ const HomeScreen: React.FC = () => {
             >
                 <View style={ styles.modalOverlay }>
                     <View style={ styles.modalContent }>
-                        <Text style={ styles.modalTitle }>Wallet Summary</Text>
+                        <Text style={ styles.modalTitle }>{strings.walletSummary}</Text>
 
                         {/* Row 1 */ }
                         <View style={ styles.summaryCard }>
                             <View>
 
-                                <Text style={ styles.summaryLabel }>Funds Received</Text>
+                                <Text style={ styles.summaryLabel }>{strings.fundReceived}</Text>
                                 <Text style={ styles.summaryAmount }>
                                     ${ funds?.funds_received || "0.00" }
                                 </Text>
@@ -148,7 +149,7 @@ const HomeScreen: React.FC = () => {
                         <View style={ styles.summaryCard }>
                             <View>
 
-                                <Text style={ styles.summaryLabel }>Funds Spent</Text>
+                                <Text style={ styles.summaryLabel }>{strings.fundSpent}</Text>
                                 <Text style={ styles.summaryAmount }>
                                     ${ funds?.funds_spent || "0.00" }
                                 </Text>
@@ -163,7 +164,7 @@ const HomeScreen: React.FC = () => {
                         <View style={ styles.summaryCard }>
                             <View>
 
-                                <Text style={ styles.summaryLabel }>Remaining Balance</Text>
+                                <Text style={ styles.summaryLabel }>{strings.remainingBalance}</Text>
                                 <Text style={ styles.summaryAmount }>
                                     ${ funds?.remaining_balance || "0.00" }
                                 </Text>

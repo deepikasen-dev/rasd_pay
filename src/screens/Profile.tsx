@@ -7,8 +7,8 @@ import {
     TouchableOpacity,
     Image,
     StyleSheet,
+    ScrollView,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../redux/store";
 import { logout, updateUserSetting } from "../redux/slices/authSlice";
@@ -18,6 +18,8 @@ import colors from "../utils/colors";
 import { hp, wp } from "../utils/globalUse";
 import CustomSwitch from "../components/CustomSwitch";
 import LanguageDropdown from "../components/LanguageDropDown";
+import { setAppLanguage } from "../utils/setLocale";
+import strings from "../utils/strings";
 
 const ProfileScreen: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -53,9 +55,12 @@ const ProfileScreen: React.FC = () => {
     //     "2": "Arabic",
     // };
 
-
     return (
-        <View style={ styles.container }>
+        <ScrollView
+            style={ styles.container }
+            contentContainerStyle={ { paddingBottom: 40 } } // extra space at bottom
+            showsVerticalScrollIndicator={ false }
+        >
             {/* Profile */ }
             <View style={ styles.profileBox }>
                 <TouchableOpacity>
@@ -77,22 +82,24 @@ const ProfileScreen: React.FC = () => {
             {/* Preferences */ }
             <View style={styles.optionsContainer}>
 
-            <Text style={ styles.sectionTitle }>PREFERENCES</Text>
+            <Text style={ styles.sectionTitle }>{strings.preferences}</Text>
 
             <View style={ styles.card }>
-                <Text style={ styles.label }>Language</Text>
+                <Text style={ styles.label }>{strings.language}</Text>
                     <LanguageDropdown
                         selected={ language }
                         onSelect={ ( val ) => {
                             setLanguage( val );
                             handleUpdate( "language_id", val );
+                            // Update localization strings
+                            setAppLanguage( val );
                         } }
                     />
              </View>
                 <View style={ {borderBottomColor:colors.borderColor, borderBottomWidth:hp(0.1)} } />
 
             <View style={ styles.toggleCard }>
-                <Text style={ styles.label }>Biometric Login</Text>
+                <Text style={ styles.label }>{strings.biometricLogin}</Text>
                    
                     <CustomSwitch
                         value={ biometricEnabled }
@@ -101,13 +108,11 @@ const ProfileScreen: React.FC = () => {
                             handleUpdate( "biometric_login", val ? 1 : 0 );
                         } }
                     />
-
-
             </View>
             <View style={ { borderBottomColor: colors.borderColor, borderBottomWidth: hp( 0.1 ) } } />
 
             <View style={ styles.toggleCard }>
-                <Text style={ styles.label }>App Notifications</Text>
+                <Text style={ styles.label }>{strings.appNotifications}</Text>
                
                     <CustomSwitch
                         value={ notificationsEnabled }
@@ -122,16 +127,16 @@ const ProfileScreen: React.FC = () => {
 
             {/* Security */ }
             <View style={styles.optionsContainer}>
-            <Text style={ styles.sectionTitle }>ACCOUNT SECURITY</Text>
+            <Text style={ styles.sectionTitle }>{strings.accountSecurity}</Text>
             <TouchableOpacity style={ styles.card }>
-                <Text style={ styles.label }>Change Password</Text>
+                <Text style={ styles.label }>{strings.changePassword}</Text>
             </TouchableOpacity>
             </View>
 
-            <CustomButton title="Logout" onPress={ () => dispatch( logout() ) } icon={<SvgImages.LogOutSVG/>} />
+            <CustomButton title={strings.logout} onPress={ () => dispatch( logout() ) } icon={<SvgImages.LogOutSVG/>} />
 
             <Text style={ styles.version }>App Version 1.0.0</Text>
-        </View>
+        </ScrollView>
     );
 };
 

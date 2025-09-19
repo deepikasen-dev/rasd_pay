@@ -1,4 +1,5 @@
 // src/redux/languageSlice.ts
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface LanguageState {
@@ -6,7 +7,7 @@ interface LanguageState {
 }
 
 const initialState: LanguageState = {
-    id: "",
+    id: "1",
 };
 
 const languageSlice = createSlice( {
@@ -15,9 +16,14 @@ const languageSlice = createSlice( {
     reducers: {
         setLanguage( state, action: PayloadAction<string> ) {
             state.id = action.payload;
+            AsyncStorage.setItem( "languageId", action.payload ); // persist
+
+        },
+        setLanguageFromStorage( state, action: PayloadAction<string> ) {
+            state.id = action.payload;
         },
     },
 } );
 
-export const { setLanguage } = languageSlice.actions;
+export const { setLanguage, setLanguageFromStorage } = languageSlice.actions;
 export default languageSlice.reducer;

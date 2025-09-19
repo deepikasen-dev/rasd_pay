@@ -10,6 +10,7 @@ import colors from "../utils/colors";
 import { View } from "react-native";
 import { hp, wp } from "../utils/globalUse";
 import UploadScreen from "../screens/UploadScreen";
+import strings from "../utils/strings";
 
 const Tab = createBottomTabNavigator();
 
@@ -67,21 +68,21 @@ export default function BottomTabs() {
                 name={Routes.HOME_STACK}
                 component={ HomeStack }
                 options={ {
-                    title: "Home",
+                    title: `${ strings.home }`,
                 } }
             />
             <Tab.Screen
                 name="Upload"
                 component={ UploadScreen }
                 options={ {
-                    title:'Upload'
+                    title: `${ strings.upload }`
                 } }
             />
             <Tab.Screen
                 name="ExpensesTab"
                 component={ ExpensesStack }
                 options={ {
-                    title: "Expenses",
+                    title: `${strings.expenses}`,
                    
                 } }
             />
@@ -89,7 +90,7 @@ export default function BottomTabs() {
                 name="ProfileTab"
                 component={ ProfileStack }
                 options={ {
-                    title: "Profile",
+                    title: `${ strings.profile }`,
                 } }
             />
         </Tab.Navigator>

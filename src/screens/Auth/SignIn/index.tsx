@@ -18,6 +18,7 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import { sendVerificationCode } from "../../../redux/slices/authSlice";
 import { hp, wp } from "../../../utils/globalUse";
 import LinearGradient from "react-native-linear-gradient";
+import strings from "../../../utils/strings";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -41,7 +42,6 @@ const SignInScreen: React.FC<Props> = ( { navigation } ) => {
                 Alert.alert( "Invalid Email", "Please enter a valid email address" );
                 return;
             }
-
             const result = await dispatch(
                 sendVerificationCode( { language_id, email } )
             );
@@ -90,9 +90,9 @@ console.log(result);
     return (
         <View style={ styles.container }>
             <svgImages.AppLogoSVG style={ styles.logo } />
-            <Text style={ styles.title }>Welcome Back</Text>
+            <Text style={ styles.title }>{strings.welcomeBack}</Text>
             <Text style={ styles.subtitle }>
-                Sign in to your RASD Pay account
+                {strings.signIn}
             </Text>
 
             {/* Tabs */ }
@@ -116,7 +116,7 @@ console.log(result);
                             selectedTab === "email" && styles.tabTextActive,
                         ] }
                     >
-                        Email
+                        {strings.email}
                     </Text>
                         
 
@@ -137,7 +137,7 @@ console.log(result);
                                 selectedTab === "email" && styles.tabTextActive,
                             ] }
                         >
-                            Email
+                            { strings.email }
                         </Text>
 
                     </TouchableOpacity>)
@@ -161,7 +161,7 @@ console.log(result);
                                     selectedTab === "phone" && styles.tabTextActive,
                                 ] }
                             >
-                                Phone
+                                { strings.phone }
                             </Text>
                         </TouchableOpacity>
                     </LinearGradient> )
@@ -180,7 +180,7 @@ console.log(result);
                                 selectedTab === "phone" && styles.tabTextActive,
                             ] }
                         >
-                            Phone
+                            { strings.phone }
                         </Text>
                     </TouchableOpacity> )
                 }
@@ -190,9 +190,9 @@ console.log(result);
             {/* Input */ }
             { selectedTab === "email" ? (
                 <View style={ styles.inputArea}>
-                <Text style={styles.inputTitle}>Email Address</Text>
+                <Text style={styles.inputTitle}>{strings.emailAddress}</Text>
                 <TextInput
-                    placeholder="Enter your email"
+                    placeholder={strings.enterYourEmail}
                     style={ styles.input }
                     keyboardType="email-address"
                     value={ email }
@@ -201,9 +201,9 @@ console.log(result);
                     </View>
             ) : (
                 <View style={styles.inputArea }>
-                        <Text style={styles.inputTitle}>Phone Number</Text>
+                        <Text style={styles.inputTitle}>{strings.phone}</Text>
                 <TextInput
-                    placeholder="Enter your phone number"
+                    placeholder={strings.enterYourEmail}
                     style={ styles.input }
                     keyboardType="phone-pad"
                     value={ phone }
@@ -215,7 +215,7 @@ console.log(result);
             {/* Remember me */ }
             <View style={ styles.rememberRow }>
                 <TouchableOpacity style={ styles.checkbox } />
-                <Text style={ styles.inputTitle }>Remember me</Text>
+                <Text style={ styles.inputTitle }>{strings.rememberMe}</Text>
             </View>
 
             <CustomButton
@@ -227,7 +227,7 @@ console.log(result);
             {/* Support */ }
             <TouchableOpacity style={ styles.support }>
                 <svgImages.CustomerSupportSVG/>
-                <Text style={ styles.supportText }>Customer Support</Text>
+                <Text style={ styles.supportText }>{strings.customerSupport}</Text>
             </TouchableOpacity>
         </View>
     );

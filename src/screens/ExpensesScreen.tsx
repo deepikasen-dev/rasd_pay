@@ -13,17 +13,21 @@ import { Expense } from "../types/expense";
 import colors from "../utils/colors";
 import SvgImages from "../utils/svgImages";
 import { wp } from "../utils/globalUse";
+import strings from "../utils/strings";
+import { getLocalizedStatus } from "../utils/getLocalizedStatus";
 
 
-const TABS: Array<"All" | "pending" | "approved" | "rejected"> = [
-    "All",
-    "pending",
-    "approved",
-    "rejected",
-];
 
 const ExpensesScreen: React.FC<any> = ( { navigation } ) => {
-    const [ activeTab, setActiveTab ] = useState<"All" | "pending" | "approved" | "rejected">( "All" );
+    const [ activeTab, setActiveTab ] = useState<typeof TABS[ number ][ "key" ]>( "all" );
+    
+    const TABS = [
+        { key: "all", label: strings.all },
+        { key: "pending", label: strings.pending },
+        { key: "approved", label: strings.approved },
+        { key: "rejected", label: strings.rejected },
+    ] as const;
+
     const dispatch = useDispatch<AppDispatch>();
     const { list, loading } = useSelector( ( state: RootState ) => state.expenses );
 
@@ -33,7 +37,9 @@ const ExpensesScreen: React.FC<any> = ( { navigation } ) => {
     }, [ dispatch ] );
 
     const filteredReceipts =
-        activeTab === "All" ? list : list.filter( ( r: Expense ) => r.status === activeTab );
+        activeTab === TABS[ 0 ].key
+            ? list
+            : list.filter( ( r: Expense ) => r.status === activeTab );
 
     const renderCard = ( { item }: { item: Expense } ) => (
         <TouchableOpacity
@@ -55,7 +61,7 @@ const ExpensesScreen: React.FC<any> = ( { navigation } ) => {
                         ? styles.approvedText
                         : item.status === "pending"
                             ? styles.pendingText
-                            : styles.rejectedText ] }>{ item.status }</Text>
+                            : styles.rejectedText ] }>{getLocalizedStatus(item.status)}</Text>
                 </View>
             </View>
 
@@ -67,7 +73,7 @@ const ExpensesScreen: React.FC<any> = ( { navigation } ) => {
                 <TouchableOpacity onPress={ () => navigation.navigate( "ReceiptDetails", { receipt: item } ) }>
                     <View style={{flexDirection:'row', gap:wp(2)}}>
                     <SvgImages.EyeOnSVG/>
-                    <Text style={ styles.viewReceipt }>View Receipt</Text>
+                    <Text style={ styles.viewReceipt }>{strings.viewReceipt}</Text>
                    </View>
                 </TouchableOpacity>
                 <Text style={ styles.date }>{ item.invoice_date }</Text>
@@ -81,12 +87,12 @@ const ExpensesScreen: React.FC<any> = ( { navigation } ) => {
             <View style={ styles.tabRow }>
                 { TABS.map( ( tab ) => (
                     <TouchableOpacity
-                        key={ tab }
-                        style={ [ styles.tab, activeTab === tab && styles.activeTab ] }
-                        onPress={ () => setActiveTab( tab ) }
+                        key={ tab.key }
+                        style={ [ styles.tab, activeTab === tab.key && styles.activeTab ] }
+                        onPress={ () => setActiveTab( tab.key as typeof activeTab ) }
                     >
-                        <Text style={ activeTab === tab ? styles.activeText : styles.tabText }>
-                            { tab }
+                        <Text style={ activeTab === tab.key ? styles.activeText : styles.tabText }>
+                            { tab.label }
                         </Text>
                     </TouchableOpacity>
                 ) ) }

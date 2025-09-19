@@ -6,6 +6,7 @@ import colors from "../utils/colors";
 import SvgImages from "../utils/svgImages";
 import { wp } from "../utils/globalUse";
 import { TouchableOpacity } from "react-native";
+import strings from "../utils/strings";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,7 +14,7 @@ export default function ExpensesStack() {
     return (
         <Stack.Navigator screenOptions={ { headerShown: true } }>
             <Stack.Screen name="Expenses" component={ ExpensesScreen } options={({ navigation }) => ({
-                headerShown: true, headerTitle: 'Expense History', headerShadowVisible: false, headerStyle: {
+                headerShown: true, headerTitle: `${ strings.expenseHistory }`, headerShadowVisible: false, headerStyle: {
                     backgroundColor: colors.bg, // 🔹 set background color
                 },
                 headerLeft: () => (
@@ -32,7 +33,7 @@ export default function ExpensesStack() {
 
 })}/>
             <Stack.Screen name="ReceiptDetails" component={ ReceiptDetailsScreen } options={ ( { navigation } ) => ( {
-                headerShown: true, headerTitle: 'Details', headerShadowVisible: false, headerStyle: {
+                headerShown: true, headerTitle: `${ strings.details }`, headerShadowVisible: false, headerStyle: {
                     backgroundColor: colors.bg, // 🔹 set background color
                 },
                 headerLeft: () => (

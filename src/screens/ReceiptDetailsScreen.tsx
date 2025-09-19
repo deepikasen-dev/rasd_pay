@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import {
     View,
     Text,
-    TouchableOpacity,
     Image,
     StyleSheet,
     ActivityIndicator,
@@ -15,6 +14,8 @@ import colors from "../utils/colors";
 import CustomButton from "../components/CustomButton";
 import svgImages from "../utils/svgImages";
 import { hp } from "../utils/globalUse";
+import strings from "../utils/strings";
+import { getLocalizedStatus } from "../utils/getLocalizedStatus";
 
 type RootStackParamList = {
     ReceiptDetails: { id: number };
@@ -65,7 +66,7 @@ const ReceiptDetailsScreen: React.FC = () => {
     return (
         <View style={ styles.container }>
             <View style={ styles.card }>
-                <Text style={ styles.label }>Submitted date</Text>
+                <Text style={ styles.label }>{strings.submittedDate}</Text>
                 <View style={ styles.row }>
                     <Text style={ styles.text }>{ selectedExpense.invoice_date }</Text>
                     <Text
@@ -78,14 +79,14 @@ const ReceiptDetailsScreen: React.FC = () => {
                                     : styles.rejected,
                         ] }
                     >
-                        { selectedExpense.status }
+                        { getLocalizedStatus( selectedExpense.status ) }
                     </Text>
                 </View>
 
-                <Text style={ styles.label }>Vendor</Text>
+                <Text style={ styles.label }>{strings.vendor}</Text>
                 <Text style={ styles.text }>{ selectedExpense.vendor_name }</Text>
 
-                <Text style={ styles.label }>Amount</Text>
+                <Text style={ styles.label }>{strings.amount}</Text>
                 <Text style={ styles.amount }>${ selectedExpense.total_amount }</Text>
             </View>
 
@@ -102,7 +103,7 @@ const ReceiptDetailsScreen: React.FC = () => {
             </View>
 
             <View style={ styles.button } >
-                <CustomButton title="Download Receipt" onPress={ () => console.log( "" )
+                <CustomButton title={strings.downloadReceipt} onPress={ () => console.log( "" )
                 } icon={ <svgImages.DownloadSVG/>} />
            </View>
         </View>

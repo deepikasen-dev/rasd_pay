@@ -6,6 +6,7 @@ import { TouchableOpacity } from "react-native";
 import colors from "../utils/colors";
 import { wp } from "../utils/globalUse";
 import svgImages from "../utils/svgImages";
+import strings from "../utils/strings";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,7 +14,7 @@ export default function ProfileStack() {
     return (
         <Stack.Navigator screenOptions={ { headerShown: false } }>
             <Stack.Screen name="Profile" component={ ProfileScreen } options={ ( { navigation } ) => ( {
-                headerShown: true, headerTitle: 'Profile & Settings', headerShadowVisible: false, headerStyle: {
+                headerShown: true, headerTitle: `${ strings.profileSettings }`, headerShadowVisible: false, headerStyle: {
                     backgroundColor: colors.bg, // 🔹 set background color
                 },
                 headerLeft: () => (
@@ -31,7 +32,6 @@ export default function ProfileStack() {
                 },
 
             } ) } />
-            <Stack.Screen name="Notifications" component={ NotificationScreen } />
         </Stack.Navigator>
     );
 }

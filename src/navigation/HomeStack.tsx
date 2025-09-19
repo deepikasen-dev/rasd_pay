@@ -7,6 +7,7 @@ import colors from "../utils/colors";
 import { wp } from "../utils/globalUse";
 import { TouchableOpacity } from "react-native";
 import svgImages from "../utils/svgImages";
+import strings from "../utils/strings";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,7 +17,7 @@ export default function HomeStack() {
         <Stack.Navigator screenOptions={ { headerShown: false } }>
             <Stack.Screen name={ Routes.HOME } component={ HomeScreen } />
             <Stack.Screen name={ Routes.NOTIFICATION } component={ NotificationsScreen } options={ ( { navigation } ) => ( {
-                headerShown: true, headerTitle: 'Notifications', headerShadowVisible: false, headerStyle: {
+                headerShown: true, headerTitle: `${ strings.notifications }`, headerShadowVisible: false, headerStyle: {
                     backgroundColor: colors.bg, // 🔹 set background color
                 },
                 headerLeft: () => (

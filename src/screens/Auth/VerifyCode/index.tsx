@@ -11,6 +11,7 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import { verifyCode } from "../../../redux/slices/authSlice";
 import { hp, wp } from "../../../utils/globalUse";
 import colors from "../../../utils/colors";
+import strings from "../../../utils/strings";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -75,16 +76,16 @@ const VerifyCodeScreen: React.FC<Props> = ( { navigation, route } ) => {
                 <SvgImages.VerifyCodeSVG />
             </View>
 
-            <Text style={ styles.title }>Enter Verification Code</Text>
+            <Text style={ styles.title }>{strings.enterVerificationCode}</Text>
             <Text style={ styles.subtitle }>
-                We’ve sent a 4 digit code to your email { email }
+               {strings.sentCodeMessage} { email }
             </Text>
 
             {/* OTPInput component */ }
             <OTPInput length={ 4 } code={ code } setCode={ setCode } error={ error } />
 
             {/* Error */ }
-            { error && <Text style={ styles.errorText }>Invalid code, try again</Text> }
+            { error && <Text style={ styles.errorText }>{strings.invalidCode}</Text> }
 
             {/* Resend */ }
             <TouchableOpacity
@@ -98,13 +99,13 @@ const VerifyCodeScreen: React.FC<Props> = ( { navigation, route } ) => {
                 disabled={ timer > 0 }
             >
                 <Text style={ styles.resendText }>
-                    { timer > 0 ? `Resend in ${ timer } seconds` : "Resend Code" }
+                    { timer > 0 ? `${strings.resendIn} ${ timer } ${strings.seconds}` : `${strings.ResendCode}` }
                 </Text>
             </TouchableOpacity>
 
             <View style={ styles.buttonWrapper }>
                 <CustomButton
-                    title={otherStrings.continue }
+                    title={strings.continue }
                     onPress={ handleContinue }
                     disabled={ loading }
                 />
