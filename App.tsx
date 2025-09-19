@@ -6,8 +6,10 @@ import AppNavigator from './src/navigation/AppNavigator';
 import { StatusBarColorProvider, useStatusBarColor } from './src/context';
 import { Provider, useDispatch } from "react-redux";
 import { store } from './src/redux/store';
-import { loadPersistedLanguage } from './src/utils/languagePersist';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { setLanguageFromStorage } from './src/redux/slices/languageSlice';
+import { setAppLanguage } from './src/utils/setLocale';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -27,10 +29,32 @@ function App() {
 function AppContent() {
   const { color } = useStatusBarColor();
   const dispatch = useDispatch();
+  const [ loading, setLoading ] = useState( true );
+
   useEffect( () => {
-    loadPersistedLanguage( dispatch );
-  }, [] );
-  
+    const initLanguage = async () => {
+      const languageId = await AsyncStorage.getItem( "languageId" );
+
+      if ( languageId ) {
+        dispatch( setLanguageFromStorage( languageId ) );
+        setAppLanguage( languageId );
+      } else {
+        // ✅ No saved language → default to English
+        dispatch( setLanguageFromStorage( "1" ) );
+        setAppLanguage( "1" );
+      }
+
+      setLoading( false );
+    };
+
+    initLanguage();
+  }, [ dispatch ] );
+
+  if ( loading ) {
+    // You can also show a splash / logo here
+    return <View style={ { flex: 1, backgroundColor: "#fff" } } />;
+  }
+
   return (
     <View style={ styles.container }>
       <StatusBar backgroundColor={ color } translucent={ false } />
@@ -38,6 +62,7 @@ function AppContent() {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create( {
   container: {

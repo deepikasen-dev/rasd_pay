@@ -17,7 +17,6 @@ const languageSlice = createSlice( {
         setLanguage( state, action: PayloadAction<string> ) {
             state.id = action.payload;
             AsyncStorage.setItem( "languageId", action.payload ); // persist
-
         },
         setLanguageFromStorage( state, action: PayloadAction<string> ) {
             state.id = action.payload;

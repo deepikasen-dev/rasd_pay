@@ -20,20 +20,17 @@ import CustomSwitch from "../components/CustomSwitch";
 import LanguageDropdown from "../components/LanguageDropDown";
 import { setAppLanguage } from "../utils/setLocale";
 import strings from "../utils/strings";
-
+import { setLanguage } from "../redux/slices/languageSlice";
 const ProfileScreen: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { user } = useSelector( ( state: RootState ) => state.auth );
+    const languageId = useSelector( ( state: RootState ) => state.language.id ); // ✅ read from redux
 
-    const [ language, setLanguage ] = useState( user?.language_id?.toString() || "1" );
     const [ biometricEnabled, setBiometricEnabled ] = useState( !!user?.biometric_login );
-    const [ notificationsEnabled, setNotificationsEnabled ] = useState(
-        user?.is_notify === 1
-    );
+    const [ notificationsEnabled, setNotificationsEnabled ] = useState( user?.is_notify === 1 );
 
     useEffect( () => {
         if ( user ) {
-            setLanguage( user.language_id?.toString() || "1" );
             setBiometricEnabled( !!user.biometric_login );
             setNotificationsEnabled( user.is_notify === 1 );
         }
@@ -43,24 +40,8 @@ const ProfileScreen: React.FC = () => {
         dispatch( updateUserSetting( { [ field ]: value } ) );
     };
 
-    // // Language map
-    // const languageMap: Record<string, string> = {
-    //     en: "1",
-    //     ar: "2",
-    // };
-
-    // // Reverse map to display name
-    // const languageLabels: Record<string, string> = {
-    //     "1": "English",
-    //     "2": "Arabic",
-    // };
-
     return (
-        <ScrollView
-            style={ styles.container }
-            contentContainerStyle={ { paddingBottom: 40 } } // extra space at bottom
-            showsVerticalScrollIndicator={ false }
-        >
+        <ScrollView style={ styles.container } contentContainerStyle={ { paddingBottom: 40 } } showsVerticalScrollIndicator={ false }>
             {/* Profile */ }
             <View style={ styles.profileBox }>
                 <TouchableOpacity>
@@ -72,30 +53,29 @@ const ProfileScreen: React.FC = () => {
                         } }
                         style={ styles.avatar }
                     />
-                <View style={styles.camera }>
-                <SvgImages.ProfileCameraSVG/>
-                </View>
+                    <View style={ styles.camera }>
+                        <SvgImages.ProfileCameraSVG />
+                    </View>
                 </TouchableOpacity>
                 <Text style={ styles.name }>{ user?.name }</Text>
             </View>
 
             {/* Preferences */ }
-            <View style={styles.optionsContainer}>
+            <View style={ styles.optionsContainer }>
+                <Text style={ styles.sectionTitle }>{ strings.preferences }</Text>
 
-            <Text style={ styles.sectionTitle }>{strings.preferences}</Text>
-
-            <View style={ styles.card }>
-                <Text style={ styles.label }>{strings.language}</Text>
+                <View style={ styles.card }>
+                    <Text style={ styles.label }>{ strings.language }</Text>
                     <LanguageDropdown
-                        selected={ language }
+                        selected={ languageId } // ✅ redux value, not local state
                         onSelect={ ( val ) => {
-                            setLanguage( val );
                             handleUpdate( "language_id", val );
-                            // Update localization strings
-                            setAppLanguage( val );
+                            dispatch( setLanguage( val ) );  // saves to redux + AsyncStorage
+                            setAppLanguage( val );         // updates i18n
                         } }
                     />
-             </View>
+                </View>
+
                 <View style={ {borderBottomColor:colors.borderColor, borderBottomWidth:hp(0.1)} } />
 
             <View style={ styles.toggleCard }>
