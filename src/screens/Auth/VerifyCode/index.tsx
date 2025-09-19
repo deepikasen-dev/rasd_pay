@@ -9,6 +9,8 @@ import Routes from "../../../utils/Routes";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { verifyCode } from "../../../redux/slices/authSlice";
+import { hp, wp } from "../../../utils/globalUse";
+import colors from "../../../utils/colors";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -43,6 +45,8 @@ const VerifyCodeScreen: React.FC<Props> = ( { navigation, route } ) => {
         );
 
         if ( verifyCode.fulfilled.match( result ) ) {
+            console.log( verifyCode.fulfilled );
+            
             setError( false );
             console.log( "✅ Code verified, user:", result.payload.data.user );
             navigation.reset( {
@@ -50,6 +54,7 @@ const VerifyCodeScreen: React.FC<Props> = ( { navigation, route } ) => {
                 routes: [ { name: Routes.BOTTOM_STACK } ],
             } );
         } else {
+            console.log(verifyCode.fulfilled);
             setError( true );
             Alert.alert( "Error", "Invalid code, please try again." );
         }
@@ -99,7 +104,7 @@ const VerifyCodeScreen: React.FC<Props> = ( { navigation, route } ) => {
 
             <View style={ styles.buttonWrapper }>
                 <CustomButton
-                    title={ loading ? "Verifying..." : otherStrings.continue }
+                    title={otherStrings.continue }
                     onPress={ handleContinue }
                     disabled={ loading }
                 />
@@ -111,43 +116,42 @@ const VerifyCodeScreen: React.FC<Props> = ( { navigation, route } ) => {
 const styles = StyleSheet.create( {
     container: {
         flex: 1,
-        backgroundColor: "#F7FDFF",
-        padding: 20,
-        paddingTop: 80,
+        backgroundColor: colors.bg,
+        padding: wp(5),
+        paddingTop: hp(10),
         alignItems: "center",
     },
     backBtn: {
         position: "absolute",
-        top: 50,
-        left: 20,
+        top: hp(10),
+        left: wp(5),
     },
     iconWrapper: {
-        width: 80,
-        height: 80,
         alignItems: "center",
         justifyContent: "center",
-        marginBottom: 20,
+        marginBottom: hp(1),
     },
     title: {
-        fontSize: 20,
-        fontWeight: "700",
-        color: "#1C2C3A",
-        marginBottom: 8,
+        fontSize: wp(6),
+        fontWeight: "600",
+        color: colors.primaryText,
+        marginBottom: hp(2),
     },
     subtitle: {
-        fontSize: 14,
+        fontSize: wp(4),
         color: "#6B7A8C",
-        marginBottom: 32,
+        marginBottom: hp(3),
         textAlign: "center",
     },
     errorText: {
-        color: "#FF4D4F",
-        fontSize: 14,
-        marginBottom: 8,
+        color: colors.errorText,
+        fontSize: wp(4),
+        marginBottom: hp(3),
     },
     resendText: {
-        color: "#048EC3",
-        marginBottom: 24,
+        color: colors.primaryText,
+        marginBottom: hp(4),
+        fontSize:wp(4),
     },
     buttonWrapper: {
         width: "100%",

@@ -300,7 +300,7 @@ const styles = StyleSheet.create( {
         padding: hp(2),
         marginBottom: hp(2),
         fontSize: wp(4),
-        color: colors.borderColor,
+        color: 'black',
         backgroundColor:colors.cardContainerBG,
     },
     inputTitle: { color: colors.primaryText, fontSize:wp(4), fontWeight:"500", },

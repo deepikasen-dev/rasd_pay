@@ -12,6 +12,7 @@ const Routes = {
     PROFILE_SETTINGS: 'Profile&Settings',
     HOME_STACK: 'HomeStack',
     BOTTOM_STACK: 'BottomStack',
+    UPLOAD:'Upload',
 };
 
 export default Routes;

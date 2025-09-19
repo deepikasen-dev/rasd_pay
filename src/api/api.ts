@@ -18,6 +18,11 @@ export async function apiRequest<T>(
 
     const token = await AsyncStorage.getItem( "token" );
 
+    console.log( endpoint, " endpoint " );
+    console.log( body, " body " );
+    console.log( params, " params " );
+    
+
     const response = await fetch( url, {
         method,
         headers: {
@@ -26,6 +31,7 @@ export async function apiRequest<T>(
         },
         body: body ? JSON.stringify( body ) : undefined,
     } );
+   console.log(response);
    
     
 

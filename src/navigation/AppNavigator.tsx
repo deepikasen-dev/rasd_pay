@@ -22,6 +22,7 @@ export type RootStackParamList = {
     [ Routes.LANGUAGE_SELECTION ]: undefined;
     [ Routes.VERIFY_CODE ]: { email: string };
     [ Routes.BOTTOM_STACK ]: undefined;
+    [ Routes.UPLOAD ]: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

@@ -155,6 +155,7 @@ const authSlice = createSlice( {
                 state.error = action.payload?.message || "Failed to send OTP";
             } )
 
+    
             // verify OTP
             .addCase( verifyCode.pending, ( state ) => {
                 state.loading = true;

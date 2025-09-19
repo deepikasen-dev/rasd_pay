@@ -9,6 +9,7 @@ import ProfileStack from "./ProfileStack";
 import colors from "../utils/colors";
 import { View } from "react-native";
 import { hp, wp } from "../utils/globalUse";
+import UploadScreen from "../screens/UploadScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -71,7 +72,7 @@ export default function BottomTabs() {
             />
             <Tab.Screen
                 name="Upload"
-                component={ HomeStack }
+                component={ UploadScreen }
                 options={ {
                     title:'Upload'
                 } }
