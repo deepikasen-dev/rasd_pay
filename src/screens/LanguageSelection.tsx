@@ -52,10 +52,7 @@ const LanguageSelectionScreen: React.FC<Props> = ({ navigation }) => {
         onPress={() => setSelected('en-US')}
       >
         <View
-          style={{
-            flexDirection: 'row',
-            gap: wp(4),
-          }}
+          style={styles.langugeContainer}
         >
           <SvgImages.USflagSVG />
           <Text style={styles.languageText}>{otherStrings.languageUS}</Text>
@@ -71,10 +68,7 @@ const LanguageSelectionScreen: React.FC<Props> = ({ navigation }) => {
         onPress={() => setSelected('ar-SA')}
       >
         <View
-          style={{
-            flexDirection: 'row',
-            gap: wp(4),
-          }}
+          style={styles.langugeContainer}
         >
           <SvgImages.SAflagSVG />
           <Text style={styles.languageText}>{otherStrings.languageSA}</Text>
@@ -102,6 +96,10 @@ const styles = StyleSheet.create({
     // height: 80,
     marginBottom: hp(2),
     resizeMode: 'contain',
+  },
+  langugeContainer: {
+    flexDirection: 'row',
+    gap: wp( 4 ),
   },
   title: {
     fontSize: wp(6),

@@ -4,4 +4,4 @@
  * @lastUpdated 2025-09-19T11:33:09.006Z
  */
 
-export const API_URL = 'https://5a6a2731db03.ngrok-free.app/api';
+export const API_URL = 'https://6d0170091ccc.ngrok-free.app/api';

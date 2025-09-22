@@ -42,6 +42,7 @@ const tabBarStyle = {
     backgroundColor: colors.lightBG,
     borderTopWidth: 0,
     paddingVertical: hp( 10 ),
+   
 };
 
 const tabBarBackground = () => (
@@ -61,8 +62,9 @@ export default function BottomTabs() {
                 tabBarIcon: ( { focused } ) => getTabBarIcon( route.name, focused ),
                 tabBarStyle,
                 tabBarBackground,
-                tabBarItemStyle: { borderRadius: 20 },
+                tabBarItemStyle: { borderRadius: 20,},
                 tabBarIconStyle: { marginTop: hp( 5 ) },
+                tabBarLabelStyle:{fontSize:wp(3.5)}
             } ) }
         >
             <Tab.Screen
@@ -97,5 +99,6 @@ const styles = StyleSheet.create( {
         bottom: hp( 2 ),
         left: wp( 5 ),
         right: wp( 5 ),
+      
     }
 })

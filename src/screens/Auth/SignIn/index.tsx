@@ -15,7 +15,6 @@ import {
 } from 'react-native';
 import CustomButton from '../../../components/CustomButton';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import otherStrings from '../../../utils/otherStrings';
 import svgImages from '../../../utils/svgImages';
 import colors from '../../../utils/colors';
 import Routes from '../../../utils/Routes';
@@ -44,16 +43,14 @@ const SignInScreen: React.FC<Props> = ({ navigation }) => {
   const handleContinue = async () => {
     if (selectedTab === 'email') {
       if (!email || !validateEmail(email)) {
-        Alert.alert('Invalid Email', 'Please enter a valid email address');
+        Alert.alert(strings.invalidEmail, strings.enterValidEmail);
         return;
       }
       const result = await dispatch(
         sendVerificationCode({ language_id, email }),
       );
-     
 
       if (sendVerificationCode.fulfilled.match(result)) {
-  
 
         navigation.navigate(Routes.VERIFY_CODE, { email });
       } else if (sendVerificationCode.rejected.match(result)) {
@@ -63,8 +60,8 @@ const SignInScreen: React.FC<Props> = ({ navigation }) => {
     } else {
       if (!phone || !validatePhone(phone)) {
         Alert.alert(
-          'Invalid Phone',
-          'Please enter a valid phone number (8-15 digits)',
+          strings.invalidPhone,
+          strings.enterValidPhone,
         );
         return;
       }
@@ -127,13 +124,13 @@ const SignInScreen: React.FC<Props> = ({ navigation }) => {
             <Text
               style={[
                 styles.tabText,
-                selectedTab === 'email' && styles.tabTextActive,
               ]}
             >
               {strings.email}
             </Text>
           </TouchableOpacity>
-        )}
+        ) }
+        
         {selectedTab === 'phone' ? (
           <LinearGradient
             colors={[colors.primary1, colors.secondory]}
@@ -164,8 +161,7 @@ const SignInScreen: React.FC<Props> = ({ navigation }) => {
             <svgImages.PhoneOffSVG />
             <Text
               style={[
-                styles.tabText,
-                selectedTab === 'phone' && styles.tabTextActive,
+                styles.tabText
               ]}
             >
               {strings.phone}
@@ -206,7 +202,7 @@ const SignInScreen: React.FC<Props> = ({ navigation }) => {
       </View>
 
       <CustomButton
-        title={loading ? 'Please wait...' : otherStrings.continue}
+        title={loading ? strings.pleaseWait : strings.continue}
         onPress={handleContinue}
         disabled={loading}
       />

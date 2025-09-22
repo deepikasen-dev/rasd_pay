@@ -11,9 +11,8 @@ import Routes from '../utils/Routes';
 import NotificationsScreen from '../screens/NotificationScreen';
 import colors from '../utils/colors';
 import { wp } from '../utils/globalUse';
-import { TouchableOpacity } from 'react-native';
-import svgImages from '../utils/svgImages';
 import strings from '../utils/strings';
+import BackButton from '../components/BackButton';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,11 +30,7 @@ export default function HomeStack() {
           headerStyle: {
             backgroundColor: colors.bg, // 🔹 set background color
           },
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <svgImages.BackSVG style={{ marginLeft: 12 }} />
-            </TouchableOpacity>
-          ),
+        headerLeft: () => <BackButton onPress={ () => navigation.goBack() } />,
           headerTitleAlign: 'center', // 🔹 centers title
           headerTitleStyle: {
             fontWeight: 'bold',

@@ -10,8 +10,6 @@ import {
   Text,
   FlatList,
   StyleSheet,
-  TouchableOpacity,
-  Alert,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -19,18 +17,10 @@ import {
   getNotifications,
 } from '../redux/slices/notificationSlice';
 import { RootState, AppDispatch } from '../redux/store';
-import moment from 'moment';
-import svgImages from '../utils/svgImages';
 import colors from '../utils/colors';
 import { hp } from '../utils/globalUse';
-
-const SVG_ICONS: any = {
-  expense_approved: svgImages.ExpenseApprovedSVG,
-  expense_rejected: svgImages.ExpenseRejectedSVG,
-  price_alert: svgImages.PriceAlertSVG,
-  budget_warning: svgImages.BudgetWarningSVG,
-  default: svgImages.ExpenseApprovedSVG, // fallback
-};
+import NotificationCard from '../components/NotificationCard';
+import strings from '../utils/strings';
 
 const NotificationsScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -42,82 +32,26 @@ const NotificationsScreen: React.FC = () => {
     dispatch(getNotifications({ page: 1, limit: 20 }));
   }, [dispatch]);
 
-  const renderItem = ({ item }: any) => {
-    const Icon = SVG_ICONS[item.type] || SVG_ICONS.default;
 
-    return (
-      <View style={styles.card}>
-        {/* Left SVG Icon */}
-        <View style={styles.iconWrapper}>
-          <Icon />
-        </View>
 
-        {/* Notification Content */}
-        <View style={styles.content}>
-          <Text style={styles.title}>
-            {item.payload?.title || formatTitle(item.type)}
-          </Text>
-          <Text style={styles.message} numberOfLines={1}>
-            {item.payload?.body}
-          </Text>
-        </View>
-
-        {/* Right Side: Time + Delete */}
-        <View style={styles.rightSection}>
-          <Text style={styles.date}>{moment(item.created_at).fromNow()}</Text>
-          <TouchableOpacity
-            onPress={() =>
-              Alert.alert(
-                'Delete Notification',
-                'Are you sure you want to delete this notification?',
-                [
-                  { text: 'Cancel', style: 'cancel' },
-                  {
-                    text: 'Delete',
-                    style: 'destructive',
-                    onPress: () => {
-            
-                      dispatch(deleteNotification(item.id));
-                    },
-                  },
-                ],
-              )
-            }
-          >
-            <svgImages.DustBinSVG width={18} height={18} />
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  };
-
-  const formatTitle = (type: string) => {
-    switch (type) {
-      case 'expense_approved':
-        return 'Expense Approved';
-      case 'expense_rejected':
-        return 'Expense Rejected';
-      case 'price_alert':
-        return 'Price Alert';
-      case 'budget_warning':
-        return 'Budget Warning';
-      default:
-        return 'Notification';
-    }
+  const handleDelete = ( id:  number ) => {
+    dispatch( deleteNotification( id ) );
   };
 
   return (
-    <View style={styles.container}>
-      {loading ? (
-        <Text>Loading...</Text>
+    <View style={ styles.container }>
+      { loading ? (
+        <Text>{strings.loading}</Text>
       ) : (
         <FlatList
-          data={list}
-          keyExtractor={item => item.id.toString()}
-          renderItem={renderItem}
-          contentContainerStyle={{ paddingBottom: 16 }}
+          data={ list }
+          keyExtractor={ item => item.id.toString() }
+          renderItem={ ( { item } ) => (
+            <NotificationCard item={ item } onDelete={ handleDelete } />
+          ) }
+          contentContainerStyle={ styles.contentContainerStyle}
         />
-      )}
+      ) }
     </View>
   );
 };
@@ -158,6 +92,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   date: { fontSize: 11, color: 'black', marginBottom: 6 },
+  contentContainerStyle: { paddingBottom: 16 }
 });
 
 export default NotificationsScreen;

@@ -10,8 +10,6 @@ import {
   Text,
   Image,
   StyleSheet,
-  Modal,
-  Pressable,
   ImageBackground,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -28,6 +26,7 @@ import { fetchUserDetails } from '../redux/slices/authSlice';
 import WalletCard from '../components/WalletCard';
 import ActionCard from '../components/ActionCard';
 import strings from '../utils/strings';
+import WalletModal from '../components/WalletModal';
 
 const HomeScreen: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -40,11 +39,19 @@ const HomeScreen: React.FC = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      setColor(colors.primary1);
+      setColor(colors.secondory);
       // ✅ Fetch fresh user details when screen is focused
       dispatch(fetchUserDetails());
     }, [dispatch]),
   );
+
+    // useFocusEffect(
+    //   React.useCallback( () => {
+    //     // Set the status bar for this screen
+    //     // StatusBar.setBarStyle( 'light-content' ); // for iOS
+    //     StatusBar.setBackgroundColor( colors.secondory ); // for Android
+    //   }, [] )
+    // );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -74,7 +81,7 @@ const HomeScreen: React.FC = () => {
               {/* <Image source={ { uri: "invoices/user_11/profile_68ca628951577_2025-09-17.jpg" } } style={ styles.avatar } /> */}
               <View>
                 <Text style={styles.welcome}>{strings.welcomeBack}</Text>
-                <Text style={styles.username}>{user?.name || 'Guest'}</Text>
+                <Text style={styles.username}>{user?.name || strings.guest}</Text>
               </View>
             </View>
 
@@ -82,11 +89,12 @@ const HomeScreen: React.FC = () => {
           </View>
         </ImageBackground>
       </LinearGradient>
+
       {/* Wallet Card */}
       {!modalVisible && (
         <WalletCard
           balance={funds?.remaining_balance || '0.00'}
-          userName={user?.name || 'Guest'}
+          userName={user?.name || strings.guest}
           onPress={() => setModalVisible(true)}
         />
       )}
@@ -114,70 +122,14 @@ const HomeScreen: React.FC = () => {
       )}
 
       {/* Wallet Modal */}
-      <Modal
-        visible={modalVisible}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{strings.walletSummary}</Text>
 
-            {/* Row 1 */}
-            <View style={styles.summaryCard}>
-              <View>
-                <Text style={styles.summaryLabel}>{strings.fundReceived}</Text>
-                <Text style={styles.summaryAmount}>
-                  ${funds?.funds_received || '0.00'}
-                </Text>
-              </View>
+       {/* Inside return */}
+      <WalletModal
+        visible={ modalVisible }
+        onClose={ () => setModalVisible( false ) }
+        funds={ funds }
+      />
 
-              <View>
-                <SvgImages.CircleArrowDownSVG />
-              </View>
-            </View>
-
-            {/* Row 2 */}
-            <View style={styles.summaryCard}>
-              <View>
-                <Text style={styles.summaryLabel}>{strings.fundSpent}</Text>
-                <Text style={styles.summaryAmount}>
-                  ${funds?.funds_spent || '0.00'}
-                </Text>
-              </View>
-
-              <View>
-                <SvgImages.CircleArrowUpSVG />
-              </View>
-            </View>
-
-            {/* Row 3 */}
-            <View style={styles.summaryCard}>
-              <View>
-                <Text style={styles.summaryLabel}>
-                  {strings.remainingBalance}
-                </Text>
-                <Text style={styles.summaryAmount}>
-                  ${funds?.remaining_balance || '0.00'}
-                </Text>
-              </View>
-
-              <View>
-                <SvgImages.BalanceSVG />
-              </View>
-            </View>
-
-            {/* Close Button */}
-            <Pressable
-              style={styles.closeButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={styles.closeText}>Close</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
     </SafeAreaView>
   );
 };

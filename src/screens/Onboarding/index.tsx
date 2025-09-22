@@ -18,32 +18,11 @@ import { useStatusBarColor } from '../../context';
 import { useFocusEffect } from '@react-navigation/native';
 import colors from '../../utils/colors';
 import otherStrings from '../../utils/otherStrings';
-import { hp } from '../../utils/globalUse';
 import CustomButton from '../../components/CustomButton';
 import Routes from '../../utils/Routes';
+import { slides } from '../../data/data';
 
 const { width, height } = Dimensions.get('window');
-
-const slides = [
-  {
-    id: '1',
-    title: otherStrings.welcomeMessage,
-    subtitle: otherStrings.description1,
-    image: require('../../assets/pngs/Onboarding1.png'),
-  },
-  {
-    id: '2',
-    title: otherStrings.description2,
-    subtitle: otherStrings.description3,
-    image: require('../../assets/pngs/Onboarding2.png'),
-  },
-  {
-    id: '3',
-    title: otherStrings.description4,
-    subtitle: otherStrings.description5,
-    image: require('../../assets/pngs/Onboarding3.png'),
-  },
-];
 
 const OnboardingScreen = ({ navigation }: any) => {
   const { setColor } = useStatusBarColor();
@@ -86,7 +65,7 @@ const OnboardingScreen = ({ navigation }: any) => {
       {/* Skip button at top-right */}
       {currentIndex < slides.length - 1 && (
         <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
-          <Text style={styles.skipText}>Skip</Text>
+          <Text style={ styles.skipText }>{ otherStrings.skip }</Text>
         </TouchableOpacity>
       )}
 

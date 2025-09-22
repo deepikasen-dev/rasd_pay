@@ -24,6 +24,8 @@ const otherStrings = {
   selectLanguage: 'Select your preferred language to continue',
   languageUS: 'US   English',
   languageSA: 'SA   العربية',
+  english: 'English',
+  arabic:'Arabic',
 };
 
 export default otherStrings;

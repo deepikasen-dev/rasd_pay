@@ -9,7 +9,6 @@ import React, { useState } from 'react';
 import { Pressable, Animated, StyleSheet } from 'react-native';
 import { wp } from '../utils/globalUse';
 import SvgImages from '../utils/svgImages';
-import colors from '../utils/colors';
 
 interface CustomSwitchProps {
   value: boolean;

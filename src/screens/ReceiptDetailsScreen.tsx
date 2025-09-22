@@ -45,7 +45,7 @@ const ReceiptDetailsScreen: React.FC = () => {
   if (loading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" color="#2563EB" />
+        <ActivityIndicator size="large" color={colors.primary1} />
       </View>
     );
   }
@@ -61,7 +61,7 @@ const ReceiptDetailsScreen: React.FC = () => {
   if (!selectedExpense) {
     return (
       <View style={styles.center}>
-        <Text>No details found</Text>
+        <Text>{strings.noDetails}</Text>
       </View>
     );
   }
@@ -101,7 +101,7 @@ const ReceiptDetailsScreen: React.FC = () => {
             resizeMode="contain"
           />
         ) : (
-          <Text style={styles.placeholder}>No receipt uploaded</Text>
+          <Text style={styles.placeholder}>{strings.noReceipt}</Text>
         )}
       </View>
 
@@ -119,8 +119,7 @@ const ReceiptDetailsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.bg, padding: 16 },
   header: { fontSize: 20, fontWeight: '600', marginBottom: 16 },
-  card: {
-    backgroundColor: '#FFFFFF',
+  card: {color:colors.lightBG,
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
@@ -136,9 +135,9 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 12,
   },
-  pending: { backgroundColor: '#FEF3C7', color: '#B45309' },
-  approved: { backgroundColor: '#DCFCE7', color: '#166534' },
-  rejected: { backgroundColor: '#FEE2E2', color: '#991B1B' },
+  pending: { backgroundColor: colors.pendingBG, color:colors.pendingText },
+  approved: { backgroundColor: colors.approvedBG, color:colors.approvedText },
+  rejected: { backgroundColor: colors.rejectedBG, color:colors.errorText },
   amount: { fontSize: 18, fontWeight: '700', color: colors.primaryText },
   receiptBox: {
     backgroundColor: colors.lightBG,
@@ -154,7 +153,7 @@ const styles = StyleSheet.create({
     width: '90%',
     height: '90%',
     borderRadius: 16,
-    backgroundColor: '#f1f1f1',
+    backgroundColor: colors.lightBG,
     borderColor: colors.borderColor,
     borderWidth: 1,
   },
@@ -164,7 +163,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     alignItems: 'center',
   },
-  buttonText: { color: '#fff', fontWeight: '600', fontSize: 16 },
+  buttonText: { color:colors.lightBG, fontWeight: '600', fontSize: 16 },
   center: {
     flex: 1,
     justifyContent: 'center',

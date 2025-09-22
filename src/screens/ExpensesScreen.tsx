@@ -17,21 +17,13 @@ import { fetchExpenses } from '../redux/slices/expenseSlice';
 import { RootState, AppDispatch } from '../redux/store';
 import { Expense } from '../types/expense';
 import colors from '../utils/colors';
-import SvgImages from '../utils/svgImages';
-import { wp } from '../utils/globalUse';
+import {TABS} from '../data/data';
+import ExpenseCard from '../components/ExpenseCard';
 import strings from '../utils/strings';
-import { getLocalizedStatus } from '../utils/getLocalizedStatus';
 
 const ExpensesScreen: React.FC<any> = ({ navigation }) => {
   const [activeTab, setActiveTab] =
     useState<(typeof TABS)[number]['key']>('all');
-
-  const TABS = [
-    { key: 'all', label: strings.all },
-    { key: 'pending', label: strings.pending },
-    { key: 'approved', label: strings.approved },
-    { key: 'rejected', label: strings.rejected },
-  ] as const;
 
   const dispatch = useDispatch<AppDispatch>();
   const { list, loading } = useSelector((state: RootState) => state.expenses);
@@ -45,63 +37,9 @@ const ExpensesScreen: React.FC<any> = ({ navigation }) => {
       ? list
       : list.filter((r: Expense) => r.status === activeTab);
 
-  const renderCard = ({ item }: { item: Expense }) => (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={() => navigation.navigate('ReceiptDetails', { id: item.id })}
-    >
-      {/* Vendor Name + Status */}
-      <View style={styles.headerRow}>
-        <Text style={styles.title}>{item.vendor_name}</Text>
-        <View
-          style={[
-            styles.statusBadge,
-            item.status === 'approved'
-              ? styles.approved
-              : item.status === 'pending'
-              ? styles.pending
-              : styles.rejected,
-          ]}
-        >
-          <Text
-            style={[
-              styles.statusText,
-              item.status === 'approved'
-                ? styles.approvedText
-                : item.status === 'pending'
-                ? styles.pendingText
-                : styles.rejectedText,
-            ]}
-          >
-            {getLocalizedStatus(item.status)}
-          </Text>
-        </View>
-      </View>
-
-      {/* Amount */}
-      <Text style={styles.amount}>
-        ${parseFloat(item.total_amount).toFixed(2)}
-      </Text>
-
-      {/* Footer: View Receipt + Date */}
-      <View style={styles.footerRow}>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('ReceiptDetails', { receipt: item })
-          }
-        >
-          <View style={{ flexDirection: 'row', gap: wp(2) }}>
-            <SvgImages.EyeOnSVG />
-            <Text style={styles.viewReceipt}>{strings.viewReceipt}</Text>
-          </View>
-        </TouchableOpacity>
-        <Text style={styles.date}>{item.invoice_date}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-
+  
   return (
-    <View style={{ flex: 1, padding: 16, backgroundColor: colors.bg }}>
+    <View style={styles.container}>
       {/* Tabs */}
       <View style={styles.tabRow}>
         {TABS.map(tab => (
@@ -121,12 +59,14 @@ const ExpensesScreen: React.FC<any> = ({ navigation }) => {
 
       {/* Receipt List */}
       {loading ? (
-        <Text>Loading...</Text>
+        <Text>{strings.loading}</Text>
       ) : (
         <FlatList
           data={filteredReceipts}
           keyExtractor={item => item.id.toString()}
-          renderItem={renderCard}
+            renderItem={ ( { item } ) => (
+              <ExpenseCard item={ item } navigation={ navigation } />
+            ) }
           showsVerticalScrollIndicator={false}
         />
       )}
@@ -134,7 +74,8 @@ const ExpensesScreen: React.FC<any> = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create( {
+  container: { flex: 1, padding: 16, backgroundColor: colors.bg },
   tabRow: {
     flexDirection: 'row',
     marginBottom: 16,
@@ -160,14 +101,15 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 20,
     borderColor: '#E0E0E0',
-    borderWidth: 1,
+      borderWidth: 1,
+   
   },
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  title: { fontWeight: '600', fontSize: 16 },
+  title: { fontWeight: '400', fontSize: 16, color:colors.secondoryText },
   statusBadge: {
     paddingVertical: 4,
     paddingHorizontal: 10,

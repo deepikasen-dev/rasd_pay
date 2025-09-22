@@ -52,7 +52,7 @@ const ProfileScreen: React.FC = () => {
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={{ paddingBottom: 40 }}
+      contentContainerStyle={ styles.contentContainerStyle }
       showsVerticalScrollIndicator={false}
     >
       {/* Profile */}
@@ -81,7 +81,7 @@ const ProfileScreen: React.FC = () => {
           <Text style={styles.label}>{strings.language}</Text>
           <LanguageDropdown
             selected={languageId} // ✅ redux value, not local state
-            onSelect={val => {
+            onSelect={ val => {
               handleUpdate('language_id', val);
               dispatch(setLanguage(val)); // saves to redux + AsyncStorage
               setAppLanguage(val); // updates i18n
@@ -141,13 +141,14 @@ const ProfileScreen: React.FC = () => {
         icon={<SvgImages.LogOutSVG />}
       />
 
-      <Text style={styles.version}>App Version 1.0.0</Text>
+      <Text style={styles.version}>{strings.appVersion}</Text>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.bg, padding: 16 },
+  contentContainerStyle:{ paddingBottom: 40 },
   header: { fontSize: 20, fontWeight: '600', marginBottom: 24 },
   profileBox: { alignItems: 'center', marginBottom: hp(4) },
   camera: {

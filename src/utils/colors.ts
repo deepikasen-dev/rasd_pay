@@ -7,6 +7,7 @@
 const colors = {
   primary1: '#19CBCB',
   secondory: '#048EC3',
+    secondoryText: '#4F4F4F',
   lightBG: '#FFFFFF',
   bg: '#F4FCFF',
   rejectedBG: '#FFE2DF',
@@ -26,6 +27,7 @@ const colors = {
   tabBG: '#F3F4F5',
   badgeColor: '#E55986',
   inputField: '#F1F5F9',
-  cardContainerBG: '#F9FAFB',
+    cardContainerBG: '#F9FAFB',
+  
 };
 export default colors;

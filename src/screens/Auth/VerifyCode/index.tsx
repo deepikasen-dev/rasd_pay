@@ -9,7 +9,6 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import CustomButton from '../../../components/CustomButton';
 import OTPInput from '../../../components/OTPInput';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import otherStrings from '../../../utils/otherStrings';
 import SvgImages from '../../../utils/svgImages';
 import Routes from '../../../utils/Routes';
 import { useDispatch, useSelector } from 'react-redux';
@@ -60,7 +59,7 @@ const VerifyCodeScreen: React.FC<Props> = ({ navigation, route }) => {
       });
     } else {
       setError(true);
-      Alert.alert('Error', 'Invalid code, please try again.');
+      Alert.alert(strings.verificationFailed, strings.invalidCode);
     }
   };
 

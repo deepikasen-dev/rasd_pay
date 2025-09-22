@@ -8,7 +8,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import colors from '../utils/colors';
-import { hp, wp } from '../utils/globalUse';
+import { wp } from '../utils/globalUse';
 
 const UploadScreen: React.FC = () => {
   return (

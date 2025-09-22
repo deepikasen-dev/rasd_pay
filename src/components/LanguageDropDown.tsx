@@ -9,6 +9,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import SvgImages from '../utils/svgImages';
 import colors from '../utils/colors';
 import { hp, wp } from '../utils/globalUse';
+import otherStrings from '../utils/otherStrings';
 
 interface Props {
   selected: string;
@@ -25,7 +26,7 @@ const LanguageDropdown: React.FC<Props> = ({ selected, onSelect }) => {
         onPress={() => setVisible(true)}
       >
         <Text style={styles.dropdownText}>
-          {selected === '1' ? 'English' : 'Arabic'}
+          {selected === '1' ? otherStrings.english : otherStrings.arabic}
         </Text>
         <SvgImages.ChevronDownSVG />
       </TouchableOpacity>
@@ -38,8 +39,8 @@ const LanguageDropdown: React.FC<Props> = ({ selected, onSelect }) => {
         >
           <View style={styles.modalContent}>
             {[
-              { label: 'English', value: '1' },
-              { label: 'Arabic', value: '2' },
+              { label:otherStrings.english, value: '1' },
+              { label:otherStrings.arabic, value: '2' },
             ].map(item => (
               <TouchableOpacity
                 key={item.value}

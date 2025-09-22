@@ -9,10 +9,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ExpensesScreen from '../screens/ExpensesScreen';
 import ReceiptDetailsScreen from '../screens/ReceiptDetailsScreen';
 import colors from '../utils/colors';
-import SvgImages from '../utils/svgImages';
 import { wp } from '../utils/globalUse';
-import { TouchableOpacity } from 'react-native';
 import strings from '../utils/strings';
+import BackButton from '../components/BackButton';
+import Routes from '../utils/Routes';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,7 +20,7 @@ export default function ExpensesStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: true }}>
       <Stack.Screen
-        name="Expenses"
+        name={Routes.EXPENSES}
         component={ExpensesScreen}
         options={({ navigation }) => ({
           headerShown: true,
@@ -29,11 +29,8 @@ export default function ExpensesStack() {
           headerStyle: {
             backgroundColor: colors.bg, // 🔹 set background color
           },
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <SvgImages.BackSVG style={{ marginLeft: 12 }} />
-            </TouchableOpacity>
-          ),
+        headerLeft: () => <BackButton onPress={ () => navigation.goBack() } />,
+
           headerTitleAlign: 'center', // 🔹 centers title
           headerTitleStyle: {
             fontWeight: 'bold',
@@ -43,7 +40,7 @@ export default function ExpensesStack() {
         })}
       />
       <Stack.Screen
-        name="ReceiptDetails"
+        name={Routes.RECEIPT_DETAILS}
         component={ReceiptDetailsScreen}
         options={({ navigation }) => ({
           headerShown: true,
@@ -52,11 +49,8 @@ export default function ExpensesStack() {
           headerStyle: {
             backgroundColor: colors.bg, // 🔹 set background color
           },
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <SvgImages.BackSVG style={{ marginLeft: 12 }} />
-            </TouchableOpacity>
-          ),
+          headerLeft: () => <BackButton onPress={ () => navigation.goBack() } />,
+
           headerTitleAlign: 'center', // 🔹 centers title
           headerTitleStyle: {
             fontWeight: 'bold',
