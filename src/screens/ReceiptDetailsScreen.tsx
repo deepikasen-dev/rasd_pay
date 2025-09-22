@@ -17,8 +17,8 @@ import colors from '../utils/colors';
 import CustomButton from '../components/CustomButton';
 import svgImages from '../utils/svgImages';
 import { hp } from '../utils/globalUse';
-import strings from '../utils/strings';
 import { getLocalizedStatus } from '../utils/getLocalizedStatus';
+import { useStrings } from '../hooks/useStrings';
 
 type RootStackParamList = {
   ReceiptDetails: { id: number };
@@ -29,6 +29,7 @@ type ReceiptDetailsRouteProp = RouteProp<RootStackParamList, 'ReceiptDetails'>;
 const ReceiptDetailsScreen: React.FC = () => {
   const route = useRoute<ReceiptDetailsRouteProp>();
   const { id } = route.params;
+    const strings = useStrings(); 
 
   const dispatch = useDispatch<AppDispatch>();
   const { selectedExpense, loading, error } = useSelector(

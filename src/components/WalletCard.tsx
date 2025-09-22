@@ -8,7 +8,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { hp, wp } from '../utils/globalUse';
 import colors from '../utils/colors';
-import strings from '../utils/strings';
+import { useStrings } from '../hooks/useStrings';
 
 type Props = {
   balance: string | number;
@@ -16,7 +16,8 @@ type Props = {
   onPress?: () => void;
 };
 
-const WalletCard: React.FC<Props> = ({ balance, userName, onPress }) => {
+const WalletCard: React.FC<Props> = ( { balance, userName, onPress } ) => {
+    const strings = useStrings(); 
   return (
     <TouchableOpacity
       style={styles.wrapper}

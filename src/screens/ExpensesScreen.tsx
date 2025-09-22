@@ -17,13 +17,22 @@ import { fetchExpenses } from '../redux/slices/expenseSlice';
 import { RootState, AppDispatch } from '../redux/store';
 import { Expense } from '../types/expense';
 import colors from '../utils/colors';
-import {TABS} from '../data/data';
 import ExpenseCard from '../components/ExpenseCard';
-import strings from '../utils/strings';
+import { useStrings } from '../hooks/useStrings';
 
-const ExpensesScreen: React.FC<any> = ({ navigation }) => {
+const ExpensesScreen: React.FC<any> = ( { navigation } ) => {
+  const strings = useStrings(); 
   const [activeTab, setActiveTab] =
     useState<(typeof TABS)[number]['key']>('all');
+
+
+ const TABS = [
+    { key: 'all', label: strings.all },
+    { key: 'pending', label: strings.pending },
+    { key: 'approved', label: strings.approved },
+    { key: 'rejected', label: strings.rejected },
+  ];
+
 
   const dispatch = useDispatch<AppDispatch>();
   const { list, loading } = useSelector((state: RootState) => state.expenses);

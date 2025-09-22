@@ -25,14 +25,14 @@ import NotificationBell from '../components/NotificationBell';
 import { fetchUserDetails } from '../redux/slices/authSlice';
 import WalletCard from '../components/WalletCard';
 import ActionCard from '../components/ActionCard';
-import strings from '../utils/strings';
 import WalletModal from '../components/WalletModal';
+import { useStrings } from '../hooks/useStrings';
 
 const HomeScreen: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const { setColor } = useStatusBarColor();
   const dispatch = useDispatch<AppDispatch>();
-
+  const strings = useStrings(); 
   // ✅ Get user & funds from Redux
   const user = useSelector((state: RootState) => state.auth.user);
   const funds = useSelector((state: RootState) => state.auth.funds);

@@ -16,7 +16,7 @@ import moment from 'moment';
 import colors from '../utils/colors';
 import { hp } from '../utils/globalUse';
 import svgImages from '../utils/svgImages';
-import strings from '../utils/strings';
+import { useStrings } from '../hooks/useStrings';
 
 interface NotificationCardProps {
   item: any;
@@ -31,7 +31,8 @@ const SVG_ICONS: any = {
   default: svgImages.ExpenseApprovedSVG,
 };
 
-const NotificationCard: React.FC<NotificationCardProps> = ({ item, onDelete }) => {
+const NotificationCard: React.FC<NotificationCardProps> = ( { item, onDelete } ) => {
+      const strings = useStrings(); 
   const Icon = SVG_ICONS[item.type] || SVG_ICONS.default;
 
   const handleDelete = () => {

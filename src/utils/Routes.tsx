@@ -21,6 +21,7 @@ const Routes = {
   UPLOAD: 'Upload',
   EXPENSES_TAB: 'ExpensesTab',
   PROFILE_TAB: 'ProfileTab',
+  PROFILE:'Profile',
   
 };
 

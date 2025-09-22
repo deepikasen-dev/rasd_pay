@@ -20,10 +20,11 @@ import { RootState, AppDispatch } from '../redux/store';
 import colors from '../utils/colors';
 import { hp } from '../utils/globalUse';
 import NotificationCard from '../components/NotificationCard';
-import strings from '../utils/strings';
+import { useStrings } from '../hooks/useStrings';
 
 const NotificationsScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+    const strings = useStrings(); 
   const { list, loading } = useSelector(
     (state: RootState) => state.notifications,
   );

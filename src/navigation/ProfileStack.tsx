@@ -9,16 +9,18 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ProfileScreen from '../screens/Profile';
 import colors from '../utils/colors';
 import { wp } from '../utils/globalUse';
-import strings from '../utils/strings';
 import BackButton from '../components/BackButton';
+import Routes from '../utils/Routes';
+import { useStrings } from '../hooks/useStrings';
 
 const Stack = createNativeStackNavigator();
 
 export default function ProfileStack() {
+  const strings = useStrings(); 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
-        name="Profile"
+        name={Routes.PROFILE}
         component={ProfileScreen}
         options={({ navigation }) => ({
           headerShown: true,

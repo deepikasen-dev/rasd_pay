@@ -34,6 +34,7 @@ function AppContent() {
   useEffect( () => {
     const initLanguage = async () => {
       const languageId = await AsyncStorage.getItem( "languageId" );
+      console.log(languageId);
 
       if ( languageId ) {
         dispatch( setLanguageFromStorage( languageId ) );

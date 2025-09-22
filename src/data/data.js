@@ -23,10 +23,3 @@ export const slides = [
   },
 ];
 
-export const TABS = [
-    { key: 'all', label: strings.all },
-    { key: 'pending', label: strings.pending },
-    { key: 'approved', label: strings.approved },
-    { key: 'rejected', label: strings.rejected },
-];
-  

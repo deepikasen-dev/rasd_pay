@@ -15,7 +15,7 @@ import {
 import { hp, wp } from '../utils/globalUse';
 import colors from '../utils/colors';
 import SvgImages from '../utils/svgImages';
-import strings from '../utils/strings';
+import { useStrings } from '../hooks/useStrings';
 
 interface WalletModalProps {
     visible: boolean;
@@ -28,6 +28,7 @@ interface WalletModalProps {
 }
 
 const WalletModal: React.FC<WalletModalProps> = ( { visible, onClose, funds } ) => {
+      const strings = useStrings(); 
     return (
         <Modal
             visible={ visible }

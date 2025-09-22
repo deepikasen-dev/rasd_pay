@@ -11,12 +11,13 @@ import Routes from '../utils/Routes';
 import NotificationsScreen from '../screens/NotificationScreen';
 import colors from '../utils/colors';
 import { wp } from '../utils/globalUse';
-import strings from '../utils/strings';
 import BackButton from '../components/BackButton';
+import { useStrings } from '../hooks/useStrings';
 
 const Stack = createNativeStackNavigator();
 
 export default function HomeStack() {
+  const strings = useStrings(); 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name={Routes.HOME} component={HomeScreen} />

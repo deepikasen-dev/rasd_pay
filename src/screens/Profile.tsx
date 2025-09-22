@@ -24,10 +24,11 @@ import { hp, wp } from '../utils/globalUse';
 import CustomSwitch from '../components/CustomSwitch';
 import LanguageDropdown from '../components/LanguageDropDown';
 import { setAppLanguage } from '../utils/setLocale';
-import strings from '../utils/strings';
 import { setLanguage } from '../redux/slices/languageSlice';
+import { useStrings } from '../hooks/useStrings';
 const ProfileScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const strings = useStrings(); 
   const { user } = useSelector((state: RootState) => state.auth);
   const languageId = useSelector((state: RootState) => state.language.id); // ✅ read from redux
 

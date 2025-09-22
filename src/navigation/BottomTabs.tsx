@@ -15,7 +15,7 @@ import Routes from "../utils/Routes";
 import SvgImages from "../utils/svgImages";
 import colors from "../utils/colors";
 import { hp, wp } from "../utils/globalUse";
-import strings from "../utils/strings";
+import { useStrings } from "../hooks/useStrings";
 
 const Tab = createBottomTabNavigator();
 
@@ -52,6 +52,7 @@ const tabBarBackground = () => (
 );
 
 export default function BottomTabs() {
+    const strings = useStrings(); 
     return (
         <Tab.Navigator
             screenOptions={ ( { route } ) => ( {

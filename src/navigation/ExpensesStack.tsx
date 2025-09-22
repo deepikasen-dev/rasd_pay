@@ -10,13 +10,14 @@ import ExpensesScreen from '../screens/ExpensesScreen';
 import ReceiptDetailsScreen from '../screens/ReceiptDetailsScreen';
 import colors from '../utils/colors';
 import { wp } from '../utils/globalUse';
-import strings from '../utils/strings';
 import BackButton from '../components/BackButton';
 import Routes from '../utils/Routes';
+import { useStrings } from '../hooks/useStrings';
 
 const Stack = createNativeStackNavigator();
 
 export default function ExpensesStack() {
+  const strings = useStrings(); 
   return (
     <Stack.Navigator screenOptions={{ headerShown: true }}>
       <Stack.Screen

@@ -11,8 +11,8 @@ import { wp } from '../utils/globalUse';
 import colors from '../utils/colors';
 import SvgImages from '../utils/svgImages';
 import { getLocalizedStatus } from '../utils/getLocalizedStatus';
-import strings from '../utils/strings';
 import Routes from '../utils/Routes';
+import { useStrings } from '../hooks/useStrings';
 
 interface ExpenseCardProps {
     item: Expense;
@@ -20,6 +20,7 @@ interface ExpenseCardProps {
 }
 
 const ExpenseCard: React.FC<ExpenseCardProps> = ( { item, navigation } ) => {
+      const strings = useStrings(); 
     return (
         <TouchableOpacity
             style={ styles.card }
